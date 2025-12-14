@@ -1,0 +1,146 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+      {
+        "name": "dev",
+        "request": "launch",
+        "type": "dart",
+        "args": [
+          "--flavor", 
+          "dev", 
+          "--dart-define=FLAVOR=dev",
+          "--dart-define=STORAGE_ENCRYPTION_KEY=BaEIBWC8Si2TL99O"
+        // "--web-renderer", "html"
+        // , "--web-port", "49430"
+        
+      ]
+      },
+      {
+        "name": "dev (profile)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "profile",
+        "args": ["--flavor", "dev", "--dart-define=FLAVOR=dev", ]
+      },
+      {
+        "name": "dev (release)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "release",
+        "args": ["--flavor", "dev", "--dart-define=FLAVOR=dev", ]
+      },
+      {
+        "name": "dev (chrome)",
+        "request": "launch",
+        "type": "dart",
+        "args": [
+          "--flavor", 
+          "dev", 
+          "--dart-define=FLAVOR=dev",
+          "-d",
+          "chrome",
+          "--web-renderer",
+          "html"
+        ]
+      },
+      {
+        "name": "staging",
+        "request": "launch",
+        "type": "dart",
+        "args": [
+          "--flavor", 
+          "staging", 
+          "--dart-define=FLAVOR=staging",
+                    "--dart-define=STORAGE_ENCRYPTION_KEY=BaEIBWC8Si2TL99O",
+      ]
+      },
+      {
+        "name": "staging (profile)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "profile",
+        "args": ["--flavor", "staging", "--dart-define=FLAVOR=staging",]
+      },
+      {
+        "name": "staging (release)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "release",
+        "args": ["--flavor", "staging", "--dart-define=FLAVOR=staging",]
+      },
+      {
+        "name": "staging (chrome)",
+        "request": "launch",
+        "type": "dart",
+        "args": [
+          "--flavor", 
+          "staging", 
+          "--dart-define=FLAVOR=staging",
+          "-d",
+          "web-server",
+          "--web-renderer",
+          "html",
+          "--web-port",
+          "10000"
+        ]
+      },
+      {
+        "name": "staging (chrome-direct)",
+        "request": "launch",
+        "type": "dart",
+        "args": [
+          "--flavor", 
+          "staging", 
+          "--dart-define=FLAVOR=staging",
+                    "--dart-define=STORAGE_ENCRYPTION_KEY=BaEIBWC8Si2TL99O",
+
+          "-d",
+          "chrome",
+          "--web-renderer",
+          "html",
+          "--web-port",
+          "10000",
+          "--web-browser-flag",
+          "--disable-web-security",
+          "--web-browser-flag",
+          "--disable-features=VizDisplayCompositor",
+          "--web-browser-flag",
+          "--user-data-dir=/tmp/chrome_dev_session"
+        ]
+      },
+      {
+        "name": "prod",
+        "request": "launch",
+        "type": "dart",
+        "args": ["--flavor", "production", "--dart-define=FLAVOR=production",]
+      },
+      {
+        "name": "prod (profile)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "profile",
+        "args": ["--flavor", "production", "--dart-define=FLAVOR=production",]
+      },
+      {
+        "name": "prod (release)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "release",
+        "args": ["--flavor", "production", "--dart-define=FLAVOR=production",]
+      },
+      {
+        "name": "prod (chrome)",
+        "request": "launch",
+        "type": "dart",
+        "args": [
+          "--flavor", 
+          "production", 
+          "--dart-define=FLAVOR=production",
+          "-d",
+          "chrome",
+          "--web-renderer", 
+          "html"
+        ]
+      }
+    ]
+  }

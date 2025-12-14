@@ -1,0 +1,35 @@
+{
+  "search.exclude": {
+    "**/.fvm": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "[plist]": {
+    "editor.formatOnSave": true
+  },
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [
+      80
+    ],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    }
+  },
+  "dart.flutterSdkPath": ".fvm/versions/3.24.3",
+  "dart.env": {
+    "CHROME_EXECUTABLE": "/usr/bin/chromium"
+  },
+  "cmake.sourceDirectory": "/run/media/normdevstorm/data-linux/UNI/ANDROID-APP-PROGRAMMING/health_management_fe/linux",
+  // "cmake.sourceDirectory": "D:/WEB DEV/BE/HEALTH MANAGEMENT/health_management/windows/runner"
+}

@@ -1,0 +1,6 @@
+---
+alwaysApply: true
+---
+- Apply Clean Architecture
+- Always refractor and if neccessary, refractor to another file
+- Remember to apply the best practice

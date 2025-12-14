@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+- Analyze and respect Figma’s layout, spacing, and hierarchy in Flutter widgets.
+- Name components in Flutter consistently with their Figma counterparts for traceability.
+- Use Flutter’s design tokens or theme where possible instead of hardcoding colors, fonts, and sizes—match Figma styles via central theme management. (if the exact color exists)
+- Extract common UI elements into reusable widgets, reflecting Figma components/instances.
+- Use proper constraints and responsive layouts (Expanded, Flexible, MediaQuery, etc.) to support screen sizes, as reflected in Figma responsive layouts.
+- For icons and images, use assets exported from Figma or ensure exact match via Flutter’s equivalent vector assets.
+- Ensure text styles (font, weight, spacing) follow Figma typography specs through TextTheme or custom stylesheets.
+- Validate against Figma prototypes for user flows and micro-interactions (e.g., transitions, hover states), using Flutter animations where appropriate.
+- Regularly check accessibility—contrast, font sizes, touch targets—matching Figma accessibility guidelines.
+- Separate design-system components, pages, and logic in codebase to maintain Clean Architecture.
+- Document deviations from Figma with reason and seek designer approval where necessary.

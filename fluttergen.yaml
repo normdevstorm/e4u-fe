@@ -1,0 +1,22 @@
+flutter:
+  assets:
+    enabled: true
+    package_parameter_enabled: false
+    style: camel-case
+    use-part-of-file-name: false
+    use-declarative-naming: false
+    use-material-design-icons: false
+  fonts:
+    enabled: true
+    package_parameter_enabled: false
+    style: camel-case
+    use-declarative-naming: false
+  outputs:
+    enabled: true
+    package_parameter_enabled: false
+    path: lib/gen/assets.gen.dart
+    style: camel-case
+    use-declarative-naming: false
+    use-part-of-file-name: false
+    use-material-design-icons: false
+

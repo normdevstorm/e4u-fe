@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "266512718933",
+    "project_id": "health-mn-prod",
+    "storage_bucket": "health-mn-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266512718933:android:f9491b2b8b2debe21b88dc",
+        "android_client_info": {
+          "package_name": "com.example.health_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrj8P1C7YclP_Shkz_PG6rEGCkLEojJC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266512718933:android:59124d5553363b541b88dc",
+        "android_client_info": {
+          "package_name": "com.example.health_management.prod"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrj8P1C7YclP_Shkz_PG6rEGCkLEojJC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
