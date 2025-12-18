@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:health_management/app/config/api_exception.dart';
-import 'package:health_management/app/managers/session_manager.dart';
-import 'package:health_management/app/route/app_routing.dart';
-import 'package:health_management/presentation/auth/bloc/authentication_bloc.dart';
+import 'package:e4u_application/app/config/api_exception.dart';
+import 'package:e4u_application/app/managers/session_manager.dart';
+import 'package:e4u_application/app/route/app_routing.dart';
+import 'package:e4u_application/presentation/auth/bloc/authentication_bloc.dart';
 import 'package:logger/logger.dart';
 import '../../domain/auth/usecases/authentication_usecase.dart';
 import '../di/injection.dart';

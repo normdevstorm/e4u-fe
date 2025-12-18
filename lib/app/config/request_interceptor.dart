@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:health_management/app/managers/session_manager.dart';
+import 'package:e4u_application/app/managers/session_manager.dart';
 
 class RequestInterceptor extends Interceptor {
   @override

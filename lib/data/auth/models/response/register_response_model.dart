@@ -1,6 +1,5 @@
+import 'package:e4u_application/domain/auth/entities/register_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:health_management/domain/auth/entities/register_entity.dart';
-
 part 'register_response_model.g.dart';
 
 @JsonSerializable()

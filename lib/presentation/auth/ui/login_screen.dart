@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:health_management/app/route/route_define.dart';
-import 'package:health_management/presentation/common/button.dart';
-import 'package:health_management/presentation/common/debounce_button.dart';
-import 'package:health_management/presentation/common/input_field.dart';
-import 'package:health_management/presentation/auth/bloc/authentication_bloc.dart';
+import 'package:e4u_application/app/route/route_define.dart';
+import 'package:e4u_application/presentation/common/button.dart';
+import 'package:e4u_application/presentation/common/debounce_button.dart';
+import 'package:e4u_application/presentation/common/input_field.dart';
+import 'package:e4u_application/presentation/auth/bloc/authentication_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

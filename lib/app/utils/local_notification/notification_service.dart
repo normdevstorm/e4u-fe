@@ -3,8 +3,8 @@ import 'package:async/async.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
-import 'package:health_management/app/route/app_routing.dart';
-import 'package:health_management/app/route/route_define.dart';
+import 'package:e4u_application/app/route/app_routing.dart';
+import 'package:e4u_application/app/route/route_define.dart';
 // import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 

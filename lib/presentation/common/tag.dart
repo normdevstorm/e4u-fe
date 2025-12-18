@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:health_management/app/app.dart';
+import 'package:e4u_application/app/app.dart';
 
 class TagChip extends StatelessWidget {
   final double height;

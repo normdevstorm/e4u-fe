@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:e4u_application/app/di/injection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:health_management/app/di/injection.dart';
 import 'package:logger/logger.dart';
 // part 'api_exception.freezed.dart'; // Generated file - will be created by build_runner
 // part 'api_exception.g.dart'; // Generated file - will be created by build_runner

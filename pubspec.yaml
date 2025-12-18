@@ -1,4 +1,4 @@
-name: health_management
+name: e4u_application
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -42,7 +42,7 @@ dependencies:
   firebase_messaging: ^15.1.1
   flutter_launcher_icons: ^0.14.1
   firebase_analytics: ^11.3.2
-  sheet_loader_localization: ^0.3.0
+  sheet_loader_localization: 0.6.0
   easy_localization: ^3.0.7
   easy_localization_loader: ^2.0.2
   get_it: ^8.0.2
@@ -95,7 +95,7 @@ dependencies:
   # cached_video_player: ^2.0.4
   audioplayers: ^6.1.0
   camera: ^0.11.0+2
-  video_player: ^2.6.0
+  # video_player: ^2.6.0
   story_view: ^0.16.0
   loading_animations: ^2.2.0
   connectivity_plus: ^6.1.0
@@ -151,7 +151,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/icons/svg/
-    - assets/icons/png/
+    # - assets/icons/png/
     - assets/resources/langs/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

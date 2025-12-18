@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
-import 'package:health_management/app/route/route_define.dart';
-import 'package:health_management/presentation/auth/ui/login_screen.dart';
-import 'package:health_management/presentation/auth/ui/register_screen.dart';
+import 'package:e4u_application/app/route/route_define.dart';
+import 'package:e4u_application/presentation/auth/ui/login_screen.dart';
+import 'package:e4u_application/presentation/auth/ui/register_screen.dart';
 
 // part 'auth_route.g.dart'; // Generated file - will be created by build_runner
 

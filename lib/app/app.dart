@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../firebase/firebase_options_prod.dart';
 import '../firebase/firebase_options_stg.dart';
-import 'package:health_management/app/utils/constants/app_keys.dart';
+import 'package:e4u_application/app/utils/constants/app_keys.dart';
 
 // This file is the entry point for the app layer. It exports all the files in
 // the app layer so that they can be imported using a single import statement.

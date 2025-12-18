@@ -1,7 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:encrypt_shared_preferences/provider.dart';
-import 'package:health_management/app/utils/constants/app_keys.dart';
+import 'package:e4u_application/app/utils/constants/app_keys.dart';
 
 class SharedPreferenceManager {
   static late final EncryptedSharedPreferences _instance;

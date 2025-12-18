@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:health_management/app/config/api_exception.dart';
-import 'package:health_management/app/di/injection.dart';
-import 'package:health_management/app/managers/local_storage.dart';
-import 'package:health_management/app/managers/session_manager.dart';
-import 'package:health_management/data/auth/models/request/login_request_model.dart';
-import 'package:health_management/domain/auth/entities/login_entity.dart';
-import 'package:health_management/domain/auth/usecases/authentication_usecase.dart';
+import 'package:e4u_application/app/config/api_exception.dart';
+import 'package:e4u_application/app/di/injection.dart';
+import 'package:e4u_application/app/managers/local_storage.dart';
+import 'package:e4u_application/app/managers/session_manager.dart';
+import 'package:e4u_application/data/auth/models/request/login_request_model.dart';
+import 'package:e4u_application/domain/auth/entities/login_entity.dart';
+import 'package:e4u_application/domain/auth/usecases/authentication_usecase.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:logger/logger.dart';
 

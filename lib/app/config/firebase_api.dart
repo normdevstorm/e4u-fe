@@ -5,11 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:health_management/app/di/injection.dart';
-import 'package:health_management/app/managers/local_storage.dart';
+import 'package:e4u_application/app/di/injection.dart';
+import 'package:e4u_application/app/managers/local_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/web.dart';
-import 'package:health_management/firebase/firebase_options_cloud_message.dart';
+import 'package:e4u_application/firebase/firebase_options_cloud_message.dart';
 
 @injectable
 class FirebaseMessageService {

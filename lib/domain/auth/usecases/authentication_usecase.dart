@@ -1,6 +1,6 @@
-import 'package:health_management/domain/auth/entities/login_entity.dart';
-import 'package:health_management/domain/auth/entities/register_entity.dart';
-import 'package:health_management/domain/auth/repositories/authentication_repository.dart';
+import 'package:e4u_application/domain/auth/entities/login_entity.dart';
+import 'package:e4u_application/domain/auth/entities/register_entity.dart';
+import 'package:e4u_application/domain/auth/repositories/authentication_repository.dart';
 
 import '../../../data/auth/models/request/login_request_model.dart';
 import '../../../data/auth/models/request/register_request_model.dart';

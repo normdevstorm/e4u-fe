@@ -1,4 +1,3 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +9,14 @@ import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:health_management/app/app.dart';
-import 'package:health_management/app/route/app_routing.dart';
-import 'package:health_management/app/route/route_define.dart';
-import 'package:health_management/app/utils/regex/regex_manager.dart';
-import 'package:health_management/domain/auth/usecases/authentication_usecase.dart';
-import 'package:health_management/presentation/auth/bloc/authentication_bloc.dart';
-import 'package:health_management/presentation/common/chucker_log_button.dart';
-import 'package:health_management/presentation/common/app_icon.dart';
+import 'package:e4u_application/app/app.dart';
+import 'package:e4u_application/app/route/app_routing.dart';
+import 'package:e4u_application/app/route/route_define.dart';
+import 'package:e4u_application/app/utils/regex/regex_manager.dart';
+import 'package:e4u_application/domain/auth/usecases/authentication_usecase.dart';
+import 'package:e4u_application/presentation/auth/bloc/authentication_bloc.dart';
+import 'package:e4u_application/presentation/common/chucker_log_button.dart';
+import 'package:e4u_application/presentation/common/app_icon.dart';
 import 'app/di/injection.dart';
 import 'app/managers/toast_manager.dart';
 
@@ -32,33 +31,30 @@ void main() async {
 
   print('Flavor: $flavor');
 
-  runApp(CalendarControllerProvider(
-    controller: EventController(),
-    child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      builder: (context, child) => EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('vi', 'VN')],
-        path: 'assets/resources/langs/langs.csv',
-        assetLoader: CsvAssetLoader(),
-        startLocale: const Locale('en', 'US'),
-        useFallbackTranslations: true,
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => AuthenticationBloc(
-                authenticationUsecase: getIt<AuthenticationUsecase>(),
-              ),
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    localizationsDelegates: const [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    builder: (context, child) => EasyLocalization(
+      supportedLocales: const [Locale('en', 'US'), Locale('vi', 'VN')],
+      path: 'assets/resources/langs/langs.csv',
+      assetLoader: CsvAssetLoader(),
+      startLocale: const Locale('en', 'US'),
+      useFallbackTranslations: true,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthenticationBloc(
+              authenticationUsecase: getIt<AuthenticationUsecase>(),
             ),
-          ],
-          child: const BlocListener<AuthenticationBloc, AuthenticationState>(
-            listener: _authenticationListener,
-            child: MyApp(),
           ),
+        ],
+        child: const BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: _authenticationListener,
+          child: MyApp(),
         ),
       ),
     ),
@@ -82,7 +78,8 @@ void _authenticationListener(BuildContext context, AuthenticationState state) {
     currentContext.canPop() ? currentContext.pop() : null;
   }
   if (state is AuthenticationInitial) {
-    GoRouter.of(currentContext).goNamed(RouteDefine.login);
+    //TODO: REVERT TO LOGIN ROUTE
+    GoRouter.of(currentContext).goNamed(RouteDefine.homeScreen);
     return;
   }
 
@@ -146,17 +143,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class SkeletonPage extends StatefulWidget {
-  const SkeletonPage({super.key, required this.title, required this.child});
+class SkeletonMobilePage extends StatefulWidget {
+  const SkeletonMobilePage(
+      {super.key, required this.title, required this.child});
 
   final String title;
   final StatefulNavigationShell child;
 
   @override
-  State<SkeletonPage> createState() => _SkeletonPageState();
+  State<SkeletonMobilePage> createState() => _SkeletonMobilePageState();
 }
 
-class _SkeletonPageState extends State<SkeletonPage> {
+class _SkeletonMobilePageState extends State<SkeletonMobilePage> {
   late ScrollController _scrollController;
   late ValueNotifier<bool> _navBarVisibleNotifier;
 

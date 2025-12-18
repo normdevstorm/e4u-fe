@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:health_management/app/route/route_define.dart';
-import 'package:health_management/presentation/home/ui/home_screen.dart';
+import 'package:e4u_application/app/route/route_define.dart';
+import 'package:e4u_application/presentation/home/ui/home_screen.dart';
 
 // part 'home_route.g.dart'; // Generated file - will be created by build_runner
 

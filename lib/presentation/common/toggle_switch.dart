@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:health_management/app/app.dart';
+import 'package:e4u_application/app/app.dart';
 
 class ToggleSwitch extends StatelessWidget {
   final bool value;
@@ -24,7 +24,7 @@ class ToggleSwitch extends StatelessWidget {
       child: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: thumbColor,
+        activeThumbColor: thumbColor,
         activeTrackColor: backgroundColor,
         trackOutlineColor:
             WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
