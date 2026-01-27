@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:e4u_application/app/app.dart';
 
 /// Shared controller for learning course screen logic.
-/// Manages tab selection, module expansion state, and chapter filtering.
+/// Manages tab selection, module expansion state, and curriculum filtering.
 class LearningCourseController {
   int selectedTabIndex = 0; // 0: Dashboard, 1: Notes, 2: Resources
 
@@ -14,8 +14,8 @@ class LearningCourseController {
     3: false, // MODULE 4
   };
 
-  // Track selected chapter filter
-  String selectedChapter = 'All Chapters';
+  // Track selected curriculum filter
+  String selectedCurriculum = 'All Curriculums';
 
   /// Toggle module expansion state
   void toggleModule(int moduleIndex) {
@@ -28,14 +28,14 @@ class LearningCourseController {
     selectedTabIndex = index;
   }
 
-  /// Set selected chapter
-  void setSelectedChapter(String chapter) {
-    selectedChapter = chapter;
+  /// Set selected curriculum
+  void setSelectedCurriculum(String curriculum) {
+    selectedCurriculum = curriculum;
   }
 
-  /// Show chapter dropdown bottom sheet
-  /// Returns a Future that completes when a chapter is selected
-  Future<void> showChapterDropdown(BuildContext context) async {
+  /// Show curriculum dropdown bottom sheet
+  /// Returns a Future that completes when a curriculum is selected
+  Future<void> showCurriculumDropdown(BuildContext context) async {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -60,7 +60,7 @@ class LearningCourseController {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                'Select Chapter',
+                'Select Curriculum',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -69,11 +69,11 @@ class LearningCourseController {
               ),
             ),
             const SizedBox(height: 16),
-            _buildChapterOption(context, 'All Chapters'),
-            _buildChapterOption(context, 'Chapter 1'),
-            _buildChapterOption(context, 'Chapter 2'),
-            _buildChapterOption(context, 'Chapter 3'),
-            _buildChapterOption(context, 'Chapter 4'),
+            _buildCurriculumOption(context, 'All Curriculums'),
+            _buildCurriculumOption(context, 'Curriculum 1'),
+            _buildCurriculumOption(context, 'Curriculum 2'),
+            _buildCurriculumOption(context, 'Curriculum 3'),
+            _buildCurriculumOption(context, 'Curriculum 4'),
             SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
           ],
         ),
@@ -81,12 +81,12 @@ class LearningCourseController {
     );
   }
 
-  Widget _buildChapterOption(BuildContext context, String chapter) {
-    final bool isSelected = selectedChapter == chapter;
+  Widget _buildCurriculumOption(BuildContext context, String curriculum) {
+    final bool isSelected = selectedCurriculum == curriculum;
     return Builder(
       builder: (context) => InkWell(
         onTap: () {
-          setSelectedChapter(chapter);
+          setSelectedCurriculum(curriculum);
           Navigator.pop(context);
           // Notify parent widget to rebuild
           if (context.mounted) {
@@ -98,7 +98,7 @@ class LearningCourseController {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           color: isSelected ? ColorManager.purpleLight : Colors.transparent,
           child: Text(
-            chapter,
+            curriculum,
             style: TextStyle(
               fontSize: 16,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,

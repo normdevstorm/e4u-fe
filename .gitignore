@@ -65,3 +65,12 @@ node_modules
 
 # FVM Version Cache
 .fvm/
+
+# Flutter platform generated files
+**/generated_plugin_registrant.cc
+**/generated_plugin_registrant.h
+**/GeneratedPluginRegistrant.swift
+**/GeneratedPluginRegistrant.java
+**/GeneratedPluginRegistrant.m
+**/generated_plugins.cmake
+**/flutter_export_environment.sh
