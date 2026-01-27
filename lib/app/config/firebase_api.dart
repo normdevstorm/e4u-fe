@@ -14,10 +14,17 @@ import 'package:e4u_application/firebase/firebase_options_cloud_message.dart';
 @injectable
 class FirebaseMessageService {
   Future<void> initNotificaiton() async {
-    await Firebase.initializeApp(
-      options: DefaultCloudMessageFirebaseOptions.currentPlatform,
-      name: "[DEFAULT]",
-    );
+    // Safely initialize Firebase, handling hot restart scenarios
+    try {
+      await Firebase.initializeApp(
+        options: DefaultCloudMessageFirebaseOptions.currentPlatform,
+      );
+    } on FirebaseException catch (e) {
+      // If the app already exists (e.g., after hot restart), just continue
+      if (e.code != 'duplicate-app') {
+        rethrow;
+      }
+    }
     final firebaseMessaging = FirebaseMessaging.instance;
     final firebaseInAppMessaging = FirebaseInAppMessaging.instance;
     if (!kIsWeb && Platform.isAndroid) {
@@ -46,7 +53,14 @@ class FirebaseMessageService {
 }
 
 Future<void> _handlerBackgorundMessage(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  // Safely initialize Firebase for background isolate
+  try {
+    await Firebase.initializeApp();
+  } on FirebaseException catch (e) {
+    if (e.code != 'duplicate-app') {
+      rethrow;
+    }
+  }
   getIt<Logger>().i("onBackgroundMessage: $message");
 }
 

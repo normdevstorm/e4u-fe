@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 import 'package:e4u_application/app/route/app_routing.dart';
-import 'package:e4u_application/app/route/route_define.dart';
+// import 'package:e4u_application/app/route/route_define.dart';
 // import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -95,18 +95,19 @@ class NotificationService {
       int appointmentId = int.parse(details.payload!);
       final navigator = globalRootNavigatorKey.currentState;
       if (navigator != null) {
-        final router = GoRouter.of(navigator.context);
-        await router.pushReplacementNamed(RouteDefine.appointment,
-            queryParameters: {
-              "source": "notification",
-              "appointmentId": appointmentId.toString()
-            });
+        // TODO: Handle notification routing
+        // final router = GoRouter.of(navigator.context);
+        // await router.pushReplacementNamed(RouteDefine.appointment,
+        //     queryParameters: {
+        //       "source": "notification",
+        //       "appointmentId": appointmentId.toString()
+        //     });
       } else {
-        final router = GoRouter.of(completeContext!);
-        router.pushReplacementNamed(RouteDefine.appointment, queryParameters: {
-          "source": "notification",
-          "appointmentId": appointmentId.toString()
-        });
+        // final router = GoRouter.of(completeContext!);
+        // router.pushReplacementNamed(RouteDefine.appointment, queryParameters: {
+        //   "source": "notification",
+        //   "appointmentId": appointmentId.toString()
+        // });
       }
     } catch (e) {
       debugPrint('Error handling notification tap: $e');
@@ -190,8 +191,9 @@ class NotificationService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+
+      // uiLocalNotificationDateInterpretation:
+      //     UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }

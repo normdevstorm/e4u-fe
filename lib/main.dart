@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
@@ -7,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:e4u_application/app/app.dart';
@@ -30,6 +32,8 @@ void main() async {
       FlavorManager.values.firstWhere((element) => element.name == flavor));
 
   print('Flavor: $flavor');
+
+  usePathUrlStrategy();
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -111,6 +115,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size designSize =
+        _isMobilePlatform ? const Size(375, 812) : const Size(1440, 900);
+
     MaterialApp mainApp = MaterialApp.router(
       builder: FToastBuilder(),
       locale: context.locale,
@@ -129,7 +136,7 @@ class MyApp extends StatelessWidget {
     );
 
     return ScreenUtilInit(
-      designSize: const Size(375, 812),
+      designSize: designSize,
       useInheritedMediaQuery: true,
       builder: (context, child) => Directionality(
         textDirection: ui.TextDirection.ltr,
@@ -141,6 +148,16 @@ class MyApp extends StatelessWidget {
       child: mainApp,
     );
   }
+}
+
+bool get _isMobilePlatform {
+  if (kIsWeb) {
+    // Treat web as desktop-like by default for layout purposes.
+    return false;
+  }
+
+  return defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.android;
 }
 
 class SkeletonMobilePage extends StatefulWidget {
@@ -299,7 +316,7 @@ class _SkeletonMobilePageState extends State<SkeletonMobilePage> {
   bool _hideBottomNavBar(BuildContext context) {
     final bool hideNavBar = GoRouter.of(context)
             .state
-            ?.matchedLocation
+            .matchedLocation
             .startsWith(RegexManager.hideBottomNavBarPaths) ??
         false;
     if (!hideNavBar) {

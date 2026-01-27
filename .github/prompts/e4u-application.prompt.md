@@ -1,0 +1,21 @@
+---
+agent: agent
+---
+---
+alwaysApply: true
+---
+- Apply Clean Architecture
+- Always refractor and if neccessary, refractor to another file
+- Use BaseWrapper for responsive design
+- Use GoRouter for navigation
+- Use Bloc for state management
+- Use dependency injection
+- When UI is complex, separate into smaller widgets, reusable if possible
+- Use constants for strings, colors, dimens, etc.
+- Use extension methods for common operations
+- Use proper naming conventions
+- Remember to leave a TODO comment and code which is ready to be developed further such as Button actions, API calls, etc.
+- Use comments to explain complex logic
+- Remember to apply the best practice
+- Optimize rebuilds and performance where possible
+- Apply optimization techniques for application performance

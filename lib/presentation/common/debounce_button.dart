@@ -6,15 +6,19 @@ class DebouncedButton extends StatefulWidget {
   final Widget _button;
   final VoidCallback _onPressed;
   final Duration _duration;
+  final ShapeBorder _customBorder;
 
   DebouncedButton({
     super.key,
     required Widget button,
     required VoidCallback onPressed,
     int debounceTimeMs = 300,
+    ShapeBorder? customBorder,
   })  : _button = button,
         _onPressed = onPressed,
-        _duration = Duration(milliseconds: debounceTimeMs);
+        _duration = Duration(milliseconds: debounceTimeMs),
+        _customBorder = customBorder ??
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8));
 
   @override
   _DebouncedButtonState createState() => _DebouncedButtonState();
@@ -41,9 +45,7 @@ class _DebouncedButtonState extends State<DebouncedButton> {
     return ValueListenableBuilder(
       valueListenable: _isEnabled,
       builder: (context, isEnabled, child) => InkWell(
-        customBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        customBorder: widget._customBorder,
         onTap: isEnabled ? _onButtonPressed : null,
         child: widget._button,
       ),

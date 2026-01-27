@@ -49,10 +49,6 @@ Future<void> setUpAppUtilitis(FlavorManager flavor) async {
   // Initialize the cloud message Firebase project
   await FirebaseMessageService().initNotificaiton();
   // Initialize the chat Firebase project
-  await Firebase.initializeApp(
-    options: DefaultChatFirebaseOptions.currentPlatform,
-    name: 'chatApp',
-  );
 
   // Initialize Notification Service
   tz.initializeTimeZones();

@@ -39,8 +39,8 @@
           "--dart-define=FLAVOR=dev",
           "-d",
           "chrome",
-          "--web-renderer",
-          "html"
+          // "--web-renderer",
+          // "html"
         ]
       },
       {
@@ -76,10 +76,11 @@
           "--flavor", 
           "staging", 
           "--dart-define=FLAVOR=staging",
+                    "--dart-define=STORAGE_ENCRYPTION_KEY=BaEIBWC8Si2TL99O",
           "-d",
           "web-server",
-          "--web-renderer",
-          "html",
+          // "--web-renderer",
+          // "html",
           "--web-port",
           "10000"
         ]
@@ -93,7 +94,6 @@
           "staging", 
           "--dart-define=FLAVOR=staging",
                     "--dart-define=STORAGE_ENCRYPTION_KEY=BaEIBWC8Si2TL99O",
-
           "-d",
           "chrome",
           "--web-renderer",

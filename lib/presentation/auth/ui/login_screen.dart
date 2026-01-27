@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:e4u_application/app/route/route_define.dart';
-import 'package:e4u_application/presentation/common/button.dart';
-import 'package:e4u_application/presentation/common/debounce_button.dart';
-import 'package:e4u_application/presentation/common/input_field.dart';
-import 'package:e4u_application/presentation/auth/bloc/authentication_bloc.dart';
+import 'package:e4u_application/presentation/common/base_wrapper.dart';
+import 'package:e4u_application/presentation/auth/ui/login_mobile_screen.dart';
+import 'package:e4u_application/presentation/auth/ui/login_desktop_screen.dart';
+import 'package:e4u_application/presentation/auth/controllers/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,109 +12,25 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final ValueNotifier<bool> _isHiddenPasswordNotifier =
-      ValueNotifier<bool>(true);
-  final _emailFormKey = GlobalKey<FormState>();
-  final _emailController =
-      TextEditingController(text: 'nguyenducduypc160903@gmail.com');
-  final _passwordController = TextEditingController(text: '12332145');
+  late final LoginController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = LoginController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _emailFormKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CommonTextFormField(
-                  controller: _emailController,
-                  width: 327.w,
-                  height: 64.h,
-                  hintText: 'Email',
-                  validator: (value) {
-                    //todo: create a regex manager later on
-                    if (!RegExp(
-                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                        .hasMatch(value ?? "")) {
-                      return 'Invalid email!';
-                    }
-                    return null;
-                  },
-                ),
-                16.verticalSpace,
-                ValueListenableBuilder(
-                  valueListenable: _isHiddenPasswordNotifier,
-                  builder: (context, isHiddenPassword, child) =>
-                      CommonTextFormField(
-                    controller: _passwordController,
-                    width: 327.w,
-                    height: 64.h,
-                    hintText: 'Password',
-                    obscureText: isHiddenPassword,
-                    suffixIcon: GestureDetector(
-                      child: Icon(
-                          isHiddenPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.grey,
-                          size: 20.r),
-                      onTap: () => onTapIconHidden(_isHiddenPasswordNotifier),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: TextButton(
-                    onPressed: () async {
-                      // TODO: remove this geocoding test code later
-                    },
-                    child: const Text('Forgot password?'),
-                  ),
-                ),
-                5.verticalSpace,
-                DebouncedButton(
-                  debounceTimeMs: 1000,
-                  onPressed: () {
-                    // Handle login logic here
-                    if (_emailFormKey.currentState!.validate()) {
-                      context.read<AuthenticationBloc>().add(LoginSubmitEvent(
-                            _emailController.text,
-                            _passwordController.text,
-                          ));
-                    }
-                  },
-                  button: Button(
-                    width: 327.w,
-                    height: 60.h,
-                    text: 'Login',
-                  ),
-                ),
-                5.verticalSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('Don\'t have an account?'),
-                    TextButton(
-                      onPressed: () {
-                        context.pushNamed(RouteDefine.register);
-                      },
-                      child: const Text('Register'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return BaseWrapper(
+      mobile: LoginMobileScreen(controller: _controller),
+      desktop: LoginDesktopScreen(controller: _controller),
     );
-  }
-
-  onTapIconHidden(ValueNotifier<bool> isHiddenPasswordNotifier) {
-    isHiddenPasswordNotifier.value = !isHiddenPasswordNotifier.value;
   }
 }

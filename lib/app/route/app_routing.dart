@@ -14,6 +14,9 @@ import 'custom_navigator_observer.dart';
 // Import route definitions
 import '../../presentation/auth/auth_route.dart' show loginRoute, registerRoute;
 import '../../presentation/home/home_route.dart' show homeRoute;
+import '../../presentation/learning/learning_route.dart' show learningRoute;
+import '../../presentation/stats/stats_route.dart' show statsRoute;
+import '../../presentation/profile/profile_route.dart' show profileRoute;
 
 ///TODO: group naviagtor keys into one separate file
 final GlobalKey<NavigatorState> rootNavigatorHome = GlobalKey<NavigatorState>();
@@ -88,6 +91,15 @@ class AppRouting {
               StatefulShellBranch(
                   navigatorKey: rootNavigatorHome,
                   routes: <RouteBase>[homeRoute]),
+              StatefulShellBranch(
+                  navigatorKey: rootNavigatorLearning,
+                  routes: <RouteBase>[learningRoute]),
+              StatefulShellBranch(
+                  navigatorKey: rootNavigatorStats,
+                  routes: <RouteBase>[statsRoute]),
+              StatefulShellBranch(
+                  navigatorKey: rootNavigatorProfile,
+                  routes: <RouteBase>[profileRoute]),
             ])
       ]);
 }
