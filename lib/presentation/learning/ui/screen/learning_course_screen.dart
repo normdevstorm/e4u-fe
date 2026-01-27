@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:e4u_application/presentation/common/base_wrapper.dart';
-import 'package:e4u_application/presentation/learning/controllers/learning_course_controller.dart';
-import 'package:e4u_application/presentation/learning/ui/learning_course_mobile_screen.dart';
-import 'package:e4u_application/presentation/learning/ui/learning_course_desktop_screen.dart';
+import 'package:e4u_application/presentation/learning/ui/controllers/learning_course_controller.dart';
+import 'package:e4u_application/presentation/learning/ui/screen/learning_course_mobile_screen.dart';
+import 'package:e4u_application/presentation/learning/ui/screen/learning_course_desktop_screen.dart';
 
 /// Learning Course screen – implementation of "CURRICULUMN DASHBOARD" from Figma.
 ///

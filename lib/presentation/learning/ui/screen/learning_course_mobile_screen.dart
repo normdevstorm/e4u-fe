@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e4u_application/app/app.dart';
 import 'package:e4u_application/presentation/learning/ui/controllers/learning_course_controller.dart';
 import 'package:e4u_application/presentation/learning/ui/widgets/learning_course_widgets.dart';
+import 'package:e4u_application/presentation/learning/ui/widgets/learning_dropdown_selector.dart';
+import 'package:e4u_application/presentation/learning/ui/widgets/learning_tab_bar.dart';
 
 class LearningCourseMobileScreen extends StatefulWidget {
   const LearningCourseMobileScreen({
@@ -29,7 +31,15 @@ class _LearningCourseMobileScreenState
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildToolbar(context),
-              _buildTabs(context),
+              LearningTabBar(
+                tabs: const ['Dashboard', 'Notes', 'Resources'],
+                selectedIndex: widget.controller.selectedTabIndex,
+                onTabSelected: (index) {
+                  setState(() {
+                    widget.controller.setSelectedTab(index);
+                  });
+                },
+              ),
               SizedBox(height: 12.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -129,63 +139,6 @@ class _LearningCourseMobileScreenState
     );
   }
 
-  Widget _buildTabs(BuildContext context) {
-    const tabs = ['Dashboard', 'Notes', 'Resources'];
-
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: ColorManager.grey200,
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        children: List.generate(tabs.length, (index) {
-          final bool isSelected = index == widget.controller.selectedTabIndex;
-          return Expanded(
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  widget.controller.setSelectedTab(index);
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: isSelected
-                          ? ColorManager.purpleHard
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 12.h),
-                child: Center(
-                  child: Text(
-                    tabs[index],
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 14.sp.clamp(13, 16),
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w500,
-                      color: isSelected
-                          ? ColorManager.purpleHard
-                          : ColorManager.grey500,
-                      height: 1.4,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
-
   Widget _buildLessonsHeader(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -193,7 +146,7 @@ class _LearningCourseMobileScreenState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'LESSONS',
+            'CURRICULUM LESSONS',
             style: TextStyle(
               fontSize: 18.sp.clamp(17, 22),
               fontWeight: FontWeight.w700,
@@ -201,39 +154,12 @@ class _LearningCourseMobileScreenState
               letterSpacing: 0.5,
             ),
           ),
-          InkWell(
+          LearningDropdownSelector(
+            selectedValue: widget.controller.selectedCurriculum,
             onTap: () async {
               await widget.controller.showCurriculumDropdown(context);
               setState(() {}); // Refresh to show updated selected curriculum
             },
-            borderRadius: BorderRadius.circular(100.r),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: ColorManager.baseWhite,
-                borderRadius: BorderRadius.circular(100.r),
-                border: Border.all(color: ColorManager.grey200),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    widget.controller.selectedCurriculum,
-                    style: TextStyle(
-                      fontSize: 14.sp.clamp(13, 16),
-                      fontWeight: FontWeight.w600,
-                      color: ColorManager.grey950,
-                    ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    size: 20.r,
-                    color: ColorManager.grey800,
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),

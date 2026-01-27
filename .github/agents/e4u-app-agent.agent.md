@@ -7,6 +7,8 @@ tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'dart-sdk
 - Use BaseWrapper for responsive design
 - Use GoRouter for navigation
 - Use Bloc for state management
+- Avoid hardcoding values
+- Avoid using setState where possible, use Bloc/ValueNotifier/ChangeNotifier where possible
 - Use dependency injection
 - When UI is complex, separate into smaller widgets, reusable if possible
 - Use constants for strings, colors, dimens, etc.
@@ -18,7 +20,7 @@ tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'dart-sdk
 - Optimize rebuilds and performance where possible
 - Apply optimization techniques for application performance
 - Always implement UI responsive using BaseWrapper + ScreenUtils
-
+- When fixing layout, always do for all screens (mobile, desktop) 
 
 - Analyze and respect Figma’s layout, spacing, and hierarchy in Flutter widgets.
 - Name components in Flutter consistently with their Figma counterparts for traceability.
