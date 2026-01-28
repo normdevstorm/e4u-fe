@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:e4u_application/presentation/common/base_wrapper.dart';
 import 'package:e4u_application/presentation/study/domain/models/study_models.dart';
 import 'package:e4u_application/presentation/study/ui/controllers/study_session_controller.dart';
-import 'package:e4u_application/presentation/study/ui/screen/study_lesson_selection_mobile_screen.dart';
-import 'package:e4u_application/presentation/study/ui/screen/study_lesson_selection_desktop_screen.dart';
+import 'package:e4u_application/presentation/study/ui/screen/study_unit_selection_mobile_screen.dart';
+import 'package:e4u_application/presentation/study/ui/screen/study_unit_selection_desktop_screen.dart';
 import 'package:e4u_application/presentation/study/ui/screen/study_session_mobile_screen.dart';
 import 'package:e4u_application/presentation/study/ui/screen/study_session_desktop_screen.dart';
 
-/// Main lesson selection screen using BaseWrapper for responsive design.
-/// Shows lessons for a specific curriculum when navigated from LearningCourseScreen.
-class StudyLessonSelectionScreen extends StatefulWidget {
-  const StudyLessonSelectionScreen({
+/// Main unit selection screen using BaseWrapper for responsive design.
+/// Shows units for a specific curriculum when navigated from LearningCourseScreen.
+class StudyUnitSelectionScreen extends StatefulWidget {
+  const StudyUnitSelectionScreen({
     super.key,
     required this.curriculumId,
   });
@@ -18,12 +18,11 @@ class StudyLessonSelectionScreen extends StatefulWidget {
   final String curriculumId;
 
   @override
-  State<StudyLessonSelectionScreen> createState() =>
-      _StudyLessonSelectionScreenState();
+  State<StudyUnitSelectionScreen> createState() =>
+      _StudyUnitSelectionScreenState();
 }
 
-class _StudyLessonSelectionScreenState
-    extends State<StudyLessonSelectionScreen> {
+class _StudyUnitSelectionScreenState extends State<StudyUnitSelectionScreen> {
   late final StudySessionController _controller;
   bool _isInStudySession = false;
 
@@ -31,12 +30,12 @@ class _StudyLessonSelectionScreenState
   void initState() {
     super.initState();
     _controller = StudySessionController();
-    _loadLessons();
+    _loadUnits();
   }
 
-  Future<void> _loadLessons() async {
-    // Load lessons for the specific curriculum
-    await _controller.loadLessons(widget.curriculumId);
+  Future<void> _loadUnits() async {
+    // Load units for the specific curriculum
+    await _controller.loadUnits(widget.curriculumId);
   }
 
   @override
@@ -82,12 +81,12 @@ class _StudyLessonSelectionScreenState
     );
   }
 
-  void _handleLessonSelected(StudyLesson lesson, int partIndex) async {
-    // Select the lesson first
-    _controller.selectLesson(lesson);
+  void _handleUnitSelected(StudyUnit unit, int lessonIndex) async {
+    // Select the unit first
+    _controller.selectUnit(unit);
 
-    // Configure words to learn based on part
-    final wordsCount = lesson.parts[partIndex].words.length.clamp(1, 5);
+    // Configure words to learn based on lesson
+    final wordsCount = unit.lessons[lessonIndex].words.length.clamp(1, 5);
     _controller.setCommittedTime(wordsCount * 2); // 2 min per word estimate
 
     // Start the session
@@ -121,14 +120,14 @@ class _StudyLessonSelectionScreenState
     }
 
     return BaseWrapper(
-      mobile: StudyLessonSelectionMobileScreen(
+      mobile: StudyUnitSelectionMobileScreen(
         controller: _controller,
-        onLessonSelected: _handleLessonSelected,
+        onUnitSelected: _handleUnitSelected,
         onBack: _handleBack,
       ),
-      desktop: StudyLessonSelectionDesktopScreen(
+      desktop: StudyUnitSelectionDesktopScreen(
         controller: _controller,
-        onLessonSelected: _handleLessonSelected,
+        onUnitSelected: _handleUnitSelected,
         onBack: _handleBack,
       ),
     );

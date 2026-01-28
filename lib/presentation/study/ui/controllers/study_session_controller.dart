@@ -3,14 +3,14 @@ import 'package:e4u_application/app/app.dart';
 import 'package:e4u_application/presentation/study/domain/models/study_models.dart';
 
 /// Controller for managing study session state and flow.
-/// Handles curriculum selection, lesson selection, word preview, and learning flow.
+/// Handles curriculum selection, unit selection, word preview, and learning flow.
 class StudySessionController extends ChangeNotifier {
   StudySessionController();
 
   // --- State ---
   StudySession? _currentSession;
-  StudyLesson? _selectedLesson;
-  List<StudyLesson> _availableLessons = [];
+  StudyUnit? _selectedUnit;
+  List<StudyUnit> _availableUnits = [];
   StudyMode _selectedMode = StudyMode.sequential;
   int _committedTimeMinutes = 10;
   bool _isLoading = false;
@@ -18,9 +18,9 @@ class StudySessionController extends ChangeNotifier {
 
   // --- Getters ---
   StudySession? get currentSession => _currentSession;
-  StudyLesson? get selectedLesson => _selectedLesson;
-  List<StudyLesson> get availableLessons => _availableLessons;
-  List<StudyLesson> get lessons => _availableLessons; // Alias for compatibility
+  StudyUnit? get selectedUnit => _selectedUnit;
+  List<StudyUnit> get availableUnits => _availableUnits;
+  List<StudyUnit> get units => _availableUnits; // Alias for compatibility
   StudyMode get selectedMode => _selectedMode;
   int get committedTimeMinutes => _committedTimeMinutes;
   bool get isLoading => _isLoading;
@@ -39,10 +39,10 @@ class StudySessionController extends ChangeNotifier {
     return null;
   }
 
-  // --- Lesson Selection ---
+  // --- Unit Selection ---
 
-  /// Load available lessons for a curriculum
-  Future<void> loadLessons(String curriculumId) async {
+  /// Load available units for a curriculum
+  Future<void> loadUnits(String curriculumId) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -50,33 +50,33 @@ class StudySessionController extends ChangeNotifier {
     try {
       // TODO: Replace with actual API call
       await Future.delayed(const Duration(milliseconds: 500));
-      _availableLessons = _getMockLessons();
+      _availableUnits = _getMockUnits();
     } catch (e) {
-      _errorMessage = 'Failed to load lessons: $e';
+      _errorMessage = 'Failed to load units: $e';
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  /// Select a lesson to study
-  void selectLesson(StudyLesson lesson) {
-    _selectedLesson = lesson;
+  /// Select a unit to study
+  void selectUnit(StudyUnit unit) {
+    _selectedUnit = unit;
     notifyListeners();
   }
 
-  /// Select a lesson by ID
-  void selectLessonById(String lessonId) {
-    final lesson = _availableLessons.firstWhere(
-      (l) => l.id == lessonId,
-      orElse: () => _availableLessons.first,
+  /// Select a unit by ID
+  void selectUnitById(String unitId) {
+    final unit = _availableUnits.firstWhere(
+      (u) => u.id == unitId,
+      orElse: () => _availableUnits.first,
     );
-    selectLesson(lesson);
+    selectUnit(unit);
   }
 
-  /// Clear selected lesson
-  void clearSelectedLesson() {
-    _selectedLesson = null;
+  /// Clear selected unit
+  void clearSelectedUnit() {
+    _selectedUnit = null;
     notifyListeners();
   }
 
@@ -98,8 +98,8 @@ class StudySessionController extends ChangeNotifier {
 
   /// Start a new study session
   Future<void> startSession() async {
-    if (_selectedLesson == null) {
-      _errorMessage = 'Please select a lesson first';
+    if (_selectedUnit == null) {
+      _errorMessage = 'Please select a unit first';
       notifyListeners();
       return;
     }
@@ -109,10 +109,10 @@ class StudySessionController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Get words from lesson
+      // Get words from unit lessons
       List<StudyWord> words = [];
-      for (final part in _selectedLesson!.parts) {
-        words.addAll(part.words);
+      for (final lesson in _selectedUnit!.lessons) {
+        words.addAll(lesson.words);
       }
 
       // Limit words based on committed time
@@ -131,7 +131,7 @@ class StudySessionController extends ChangeNotifier {
 
       _currentSession = StudySession(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        lesson: _selectedLesson!,
+        unit: _selectedUnit!,
         words: words,
         exercises: exercises,
         mode: _selectedMode,
@@ -351,7 +351,7 @@ class StudySessionController extends ChangeNotifier {
   /// End current session
   void endSession() {
     _currentSession = null;
-    _selectedLesson = null;
+    _selectedUnit = null;
     notifyListeners();
   }
 
@@ -359,11 +359,11 @@ class StudySessionController extends ChangeNotifier {
 
   /// Show word preview list
   Future<void> showWordPreview(BuildContext context) async {
-    if (_selectedLesson == null) return;
+    if (_selectedUnit == null) return;
 
     final words = <StudyWord>[];
-    for (final part in _selectedLesson!.parts) {
-      words.addAll(part.words);
+    for (final lesson in _selectedUnit!.lessons) {
+      words.addAll(lesson.words);
     }
 
     await showModalBottomSheet(
@@ -487,62 +487,62 @@ class StudySessionController extends ChangeNotifier {
   }
 
   // --- Mock Data ---
-  List<StudyLesson> _getMockLessons() {
+  List<StudyUnit> _getMockUnits() {
     return [
-      StudyLesson(
-        id: 'lesson_1',
+      StudyUnit(
+        id: 'unit_1',
         title: 'Basic Greetings',
         description: 'Learn essential greeting phrases',
         estimatedMinutes: 15,
-        parts: [
-          StudyLessonPart(
-            id: 'part_1_1',
-            partNumber: 1,
+        lessons: [
+          StudyLesson(
+            id: 'lesson_1_1',
+            lessonNumber: 1,
             words: _getMockWords(1, 5),
           ),
-          StudyLessonPart(
-            id: 'part_1_2',
-            partNumber: 2,
+          StudyLesson(
+            id: 'lesson_1_2',
+            lessonNumber: 2,
             words: _getMockWords(6, 5),
           ),
-          StudyLessonPart(
-            id: 'part_1_3',
-            partNumber: 3,
+          StudyLesson(
+            id: 'lesson_1_3',
+            lessonNumber: 3,
             words: _getMockWords(11, 5),
           ),
         ],
       ),
-      StudyLesson(
-        id: 'lesson_2',
+      StudyUnit(
+        id: 'unit_2',
         title: 'Common Verbs',
         description: 'Essential action words for daily use',
         estimatedMinutes: 20,
         isLocked: false,
-        parts: [
-          StudyLessonPart(
-            id: 'part_2_1',
-            partNumber: 1,
+        lessons: [
+          StudyLesson(
+            id: 'lesson_2_1',
+            lessonNumber: 1,
             words: _getMockWords(16, 5),
           ),
-          StudyLessonPart(
-            id: 'part_2_2',
-            partNumber: 2,
+          StudyLesson(
+            id: 'lesson_2_2',
+            lessonNumber: 2,
             words: _getMockWords(21, 5),
           ),
-          StudyLessonPart(
-            id: 'part_2_3',
-            partNumber: 3,
+          StudyLesson(
+            id: 'lesson_2_3',
+            lessonNumber: 3,
             words: _getMockWords(26, 5),
           ),
         ],
       ),
-      const StudyLesson(
-        id: 'lesson_3',
+      const StudyUnit(
+        id: 'unit_3',
         title: 'Food & Drinks',
         description: 'Vocabulary for ordering and discussing food',
         estimatedMinutes: 18,
         isLocked: true,
-        parts: [],
+        lessons: [],
       ),
     ];
   }

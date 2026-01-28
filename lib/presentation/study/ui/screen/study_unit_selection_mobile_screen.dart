@@ -5,17 +5,17 @@ import 'package:e4u_application/presentation/study/domain/models/study_models.da
 import 'package:e4u_application/presentation/study/ui/controllers/study_session_controller.dart';
 import 'package:e4u_application/presentation/study/ui/widgets/study_widgets.dart';
 
-/// Mobile screen for lesson selection.
-class StudyLessonSelectionMobileScreen extends StatelessWidget {
-  const StudyLessonSelectionMobileScreen({
+/// Mobile screen for unit selection.
+class StudyUnitSelectionMobileScreen extends StatelessWidget {
+  const StudyUnitSelectionMobileScreen({
     super.key,
     required this.controller,
-    required this.onLessonSelected,
+    required this.onUnitSelected,
     required this.onBack,
   });
 
   final StudySessionController controller;
-  final void Function(StudyLesson lesson, int partIndex) onLessonSelected;
+  final void Function(StudyUnit unit, int lessonIndex) onUnitSelected;
   final VoidCallback onBack;
 
   @override
@@ -68,7 +68,7 @@ class StudyLessonSelectionMobileScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              'Choose a Lesson',
+                              'Choose a Unit',
                               style: TextStyle(
                                 fontSize: 28.sp.clamp(24, 32),
                                 fontWeight: FontWeight.w700,
@@ -77,7 +77,7 @@ class StudyLessonSelectionMobileScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 8.h),
                             Text(
-                              'Select a lesson to start learning vocabulary',
+                              'Select a unit to start learning vocabulary',
                               style: TextStyle(
                                 fontSize: 14.sp.clamp(12, 16),
                                 fontWeight: FontWeight.w500,
@@ -103,28 +103,27 @@ class StudyLessonSelectionMobileScreen extends StatelessWidget {
                   ),
                 ),
 
-              // Lesson list
+              // Unit list
               if (!controller.isLoading)
                 SliverPadding(
                   padding: EdgeInsets.all(16.w),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        final lesson = controller.lessons[index];
+                        final unit = controller.units[index];
                         return Padding(
                           padding: EdgeInsets.only(bottom: 12.h),
-                          child: StudyLessonCard(
-                            lesson: lesson,
-                            isSelected:
-                                controller.selectedLesson?.id == lesson.id,
+                          child: StudyUnitCard(
+                            unit: unit,
+                            isSelected: controller.selectedUnit?.id == unit.id,
                             onTap: () {
-                              controller.selectLessonById(lesson.id);
-                              _showPartSelectionSheet(context, lesson);
+                              controller.selectUnitById(unit.id);
+                              _showLessonSelectionSheet(context, unit);
                             },
                           ),
                         );
                       },
-                      childCount: controller.lessons.length,
+                      childCount: controller.units.length,
                     ),
                   ),
                 ),
@@ -135,37 +134,37 @@ class StudyLessonSelectionMobileScreen extends StatelessWidget {
     );
   }
 
-  void _showPartSelectionSheet(BuildContext context, StudyLesson lesson) {
+  void _showLessonSelectionSheet(BuildContext context, StudyUnit unit) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _PartSelectionSheet(
-        lesson: lesson,
-        onPartSelected: (partIndex) {
+      builder: (context) => _LessonSelectionSheet(
+        unit: unit,
+        onLessonSelected: (lessonIndex) {
           Navigator.pop(context);
-          onLessonSelected(lesson, partIndex);
+          onUnitSelected(unit, lessonIndex);
         },
       ),
     );
   }
 }
 
-class _PartSelectionSheet extends StatefulWidget {
-  const _PartSelectionSheet({
-    required this.lesson,
-    required this.onPartSelected,
+class _LessonSelectionSheet extends StatefulWidget {
+  const _LessonSelectionSheet({
+    required this.unit,
+    required this.onLessonSelected,
   });
 
-  final StudyLesson lesson;
-  final void Function(int partIndex) onPartSelected;
+  final StudyUnit unit;
+  final void Function(int lessonIndex) onLessonSelected;
 
   @override
-  State<_PartSelectionSheet> createState() => _PartSelectionSheetState();
+  State<_LessonSelectionSheet> createState() => _LessonSelectionSheetState();
 }
 
-class _PartSelectionSheetState extends State<_PartSelectionSheet> {
-  int? _selectedPartIndex;
+class _LessonSelectionSheetState extends State<_LessonSelectionSheet> {
+  int? _selectedLessonIndex;
   int _wordsToLearn = 5;
 
   @override
@@ -201,7 +200,7 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.lesson.title,
+                      widget.unit.title,
                       style: TextStyle(
                         fontSize: 22.sp.clamp(18, 24),
                         fontWeight: FontWeight.w700,
@@ -210,7 +209,7 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      'Select a part and number of words',
+                      'Select a lesson and number of words',
                       style: TextStyle(
                         fontSize: 14.sp.clamp(12, 16),
                         fontWeight: FontWeight.w500,
@@ -222,21 +221,21 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
               ),
               SizedBox(height: 16.h),
 
-              // Parts list
+              // Lessons list
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  itemCount: widget.lesson.parts.length,
+                  itemCount: widget.unit.lessons.length,
                   itemBuilder: (context, index) {
-                    final part = widget.lesson.parts[index];
-                    final isSelected = _selectedPartIndex == index;
+                    final lesson = widget.unit.lessons[index];
+                    final isSelected = _selectedLessonIndex == index;
 
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          _selectedPartIndex = index;
-                          _wordsToLearn = part.words.length.clamp(1, 5);
+                          _selectedLessonIndex = index;
+                          _wordsToLearn = lesson.words.length.clamp(1, 5);
                         });
                       },
                       child: Container(
@@ -284,7 +283,7 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Part ${index + 1}',
+                                    'Lesson ${index + 1}',
                                     style: TextStyle(
                                       fontSize: 16.sp.clamp(14, 18),
                                       fontWeight: FontWeight.w600,
@@ -293,7 +292,7 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
                                   ),
                                   SizedBox(height: 4.h),
                                   Text(
-                                    '${part.words.length} words',
+                                    '${lesson.words.length} words',
                                     style: TextStyle(
                                       fontSize: 13.sp.clamp(12, 15),
                                       fontWeight: FontWeight.w500,
@@ -325,7 +324,7 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
               ),
 
               // Word count slider
-              if (_selectedPartIndex != null) _buildWordCountSelector(),
+              if (_selectedLessonIndex != null) _buildWordCountSelector(),
 
               // Start button
               Padding(
@@ -335,9 +334,9 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _selectedPartIndex != null
+                      onPressed: _selectedLessonIndex != null
                           ? () {
-                              widget.onPartSelected(_selectedPartIndex!);
+                              widget.onLessonSelected(_selectedLessonIndex!);
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
@@ -369,8 +368,8 @@ class _PartSelectionSheetState extends State<_PartSelectionSheet> {
   }
 
   Widget _buildWordCountSelector() {
-    final maxWords = _selectedPartIndex != null
-        ? widget.lesson.parts[_selectedPartIndex!].words.length
+    final maxWords = _selectedLessonIndex != null
+        ? widget.unit.lessons[_selectedLessonIndex!].words.length
         : 5;
 
     return Container(

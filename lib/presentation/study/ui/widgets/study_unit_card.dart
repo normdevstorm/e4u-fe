@@ -3,30 +3,30 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e4u_application/app/app.dart';
 import 'package:e4u_application/presentation/study/domain/models/study_models.dart';
 
-/// Card widget displaying a lesson for selection.
-class StudyLessonCard extends StatelessWidget {
-  const StudyLessonCard({
+/// Card widget displaying a unit for selection.
+class StudyUnitCard extends StatelessWidget {
+  const StudyUnitCard({
     super.key,
-    required this.lesson,
+    required this.unit,
     required this.onTap,
     this.isSelected = false,
   });
 
-  final StudyLesson lesson;
+  final StudyUnit unit;
   final VoidCallback onTap;
   final bool isSelected;
 
   /// Show bottom sheet with words preview
   void _showWordsPreview(BuildContext context) {
-    // Collect all words from all parts
-    final allWords = lesson.parts.expand((part) => part.words).toList();
+    // Collect all words from all lessons
+    final allWords = unit.lessons.expand((lesson) => lesson.words).toList();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => _WordsPreviewBottomSheet(
-        lessonTitle: lesson.title,
+        unitTitle: unit.title,
         words: allWords,
       ),
     );
@@ -35,11 +35,11 @@ class StudyLessonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: lesson.isLocked ? null : onTap,
+      onTap: unit.isLocked ? null : onTap,
       child: Container(
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: lesson.isLocked
+          color: unit.isLocked
               ? ColorManager.grey100
               : (isSelected
                   ? ColorManager.purpleLight
@@ -55,22 +55,22 @@ class StudyLessonCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                // Lesson icon/thumbnail
+                // Unit icon/thumbnail
                 Container(
                   width: 48.r,
                   height: 48.r,
                   decoration: BoxDecoration(
-                    color: lesson.isLocked
+                    color: unit.isLocked
                         ? ColorManager.grey200
                         : ColorManager.purpleLight,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Icon(
-                    lesson.isLocked
+                    unit.isLocked
                         ? Icons.lock_rounded
                         : Icons.menu_book_rounded,
                     size: 24.r,
-                    color: lesson.isLocked
+                    color: unit.isLocked
                         ? ColorManager.grey400
                         : ColorManager.purpleHard,
                   ),
@@ -81,11 +81,11 @@ class StudyLessonCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        lesson.title,
+                        unit.title,
                         style: TextStyle(
                           fontSize: 16.sp.clamp(14, 18),
                           fontWeight: FontWeight.w600,
-                          color: lesson.isLocked
+                          color: unit.isLocked
                               ? ColorManager.grey400
                               : ColorManager.grey950,
                         ),
@@ -94,7 +94,7 @@ class StudyLessonCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        lesson.description,
+                        unit.description,
                         style: TextStyle(
                           fontSize: 13.sp.clamp(12, 15),
                           fontWeight: FontWeight.w400,
@@ -122,27 +122,27 @@ class StudyLessonCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 12.h),
-            // Lesson info
+            // Unit info
             Row(
               children: [
                 _buildInfoChip(
                   Icons.layers_rounded,
-                  '${lesson.totalParts} parts',
+                  '${unit.totalLessons} lessons',
                 ),
                 SizedBox(width: 12.w),
                 // Words count with preview button
                 _buildWordsPreviewChip(context),
-                if (lesson.estimatedMinutes != null) ...[
+                if (unit.estimatedMinutes != null) ...[
                   SizedBox(width: 12.w),
                   _buildInfoChip(
                     Icons.timer_outlined,
-                    '${lesson.estimatedMinutes} min',
+                    '${unit.estimatedMinutes} min',
                   ),
                 ],
               ],
             ),
             // Progress bar (if applicable)
-            if (lesson.progress > 0 && !lesson.isLocked) ...[
+            if (unit.progress > 0 && !unit.isLocked) ...[
               SizedBox(height: 12.h),
               _buildProgressBar(),
             ],
@@ -177,16 +177,16 @@ class StudyLessonCard extends StatelessWidget {
   /// Build words count chip with preview button
   Widget _buildWordsPreviewChip(BuildContext context) {
     return GestureDetector(
-      onTap: lesson.isLocked ? null : () => _showWordsPreview(context),
+      onTap: unit.isLocked ? null : () => _showWordsPreview(context),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
         decoration: BoxDecoration(
-          color: lesson.isLocked
+          color: unit.isLocked
               ? ColorManager.grey200
               : ColorManager.purpleLight.withOpacity(0.5),
           borderRadius: BorderRadius.circular(8.r),
           border: Border.all(
-            color: lesson.isLocked
+            color: unit.isLocked
                 ? ColorManager.grey300
                 : ColorManager.purpleHard.withOpacity(0.3),
           ),
@@ -197,22 +197,22 @@ class StudyLessonCard extends StatelessWidget {
             Icon(
               Icons.text_fields_rounded,
               size: 14.r,
-              color: lesson.isLocked
+              color: unit.isLocked
                   ? ColorManager.grey400
                   : ColorManager.purpleHard,
             ),
             SizedBox(width: 4.w),
             Text(
-              '${lesson.totalWords} words',
+              '${unit.totalWords} words',
               style: TextStyle(
                 fontSize: 12.sp.clamp(11, 14),
                 fontWeight: FontWeight.w500,
-                color: lesson.isLocked
+                color: unit.isLocked
                     ? ColorManager.grey400
                     : ColorManager.purpleHard,
               ),
             ),
-            if (!lesson.isLocked) ...[
+            if (!unit.isLocked) ...[
               SizedBox(width: 4.w),
               Icon(
                 Icons.visibility_outlined,
@@ -242,7 +242,7 @@ class StudyLessonCard extends StatelessWidget {
               ),
             ),
             Text(
-              '${(lesson.progress * 100).toInt()}%',
+              '${(unit.progress * 100).toInt()}%',
               style: TextStyle(
                 fontSize: 12.sp.clamp(11, 14),
                 fontWeight: FontWeight.w600,
@@ -255,7 +255,7 @@ class StudyLessonCard extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(4.r),
           child: LinearProgressIndicator(
-            value: lesson.progress,
+            value: unit.progress,
             backgroundColor: ColorManager.grey200,
             valueColor: const AlwaysStoppedAnimation(ColorManager.purpleHard),
             minHeight: 6.h,
@@ -266,14 +266,14 @@ class StudyLessonCard extends StatelessWidget {
   }
 }
 
-/// Bottom sheet widget to preview words in a lesson
+/// Bottom sheet widget to preview words in a unit
 class _WordsPreviewBottomSheet extends StatelessWidget {
   const _WordsPreviewBottomSheet({
-    required this.lessonTitle,
+    required this.unitTitle,
     required this.words,
   });
 
-  final String lessonTitle;
+  final String unitTitle;
   final List<StudyWord> words;
 
   @override
@@ -320,7 +320,7 @@ class _WordsPreviewBottomSheet extends StatelessWidget {
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        lessonTitle,
+                        unitTitle,
                         style: TextStyle(
                           fontSize: 14.sp.clamp(13, 16),
                           fontWeight: FontWeight.w500,

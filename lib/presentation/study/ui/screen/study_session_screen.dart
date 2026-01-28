@@ -23,13 +23,13 @@ class _StudySessionScreenState extends State<StudySessionScreen> {
   }
 
   Future<void> _initializeSession() async {
-    await _controller.loadLessons('mock_curriculum');
+    await _controller.loadUnits('mock_curriculum');
 
     // Auto-start session with mock data for demo
-    // TODO: Replace with proper lesson selection flow
-    if (_controller.availableLessons.isNotEmpty) {
-      // Select first lesson and start session
-      _controller.selectLesson(_controller.availableLessons.first);
+    // TODO: Replace with proper unit selection flow
+    if (_controller.availableUnits.isNotEmpty) {
+      // Select first unit and start session
+      _controller.selectUnit(_controller.availableUnits.first);
       await _controller.startSession();
     }
   }

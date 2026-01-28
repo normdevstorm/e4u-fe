@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:e4u_application/app/route/route_define.dart';
 import 'package:e4u_application/presentation/curriculum/ui/screen/learning_course_screen.dart';
-import 'package:e4u_application/presentation/study/ui/screen/study_lesson_selection_screen.dart';
+import 'package:e4u_application/presentation/study/ui/screen/study_unit_selection_screen.dart';
 part 'learning_route.g.dart';
 
 @TypedGoRoute<LearningScreenRoute>(
@@ -30,6 +30,6 @@ class StudyRoute extends GoRouteData with $StudyRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return StudyLessonSelectionScreen(curriculumId: curriculumId);
+    return StudyUnitSelectionScreen(curriculumId: curriculumId);
   }
 }

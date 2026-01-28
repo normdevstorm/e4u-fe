@@ -5,27 +5,27 @@ import 'package:e4u_application/presentation/study/domain/models/study_models.da
 import 'package:e4u_application/presentation/study/ui/controllers/study_session_controller.dart';
 import 'package:e4u_application/presentation/study/ui/widgets/study_widgets.dart';
 
-/// Desktop screen for lesson selection.
-class StudyLessonSelectionDesktopScreen extends StatefulWidget {
-  const StudyLessonSelectionDesktopScreen({
+/// Desktop screen for unit selection.
+class StudyUnitSelectionDesktopScreen extends StatefulWidget {
+  const StudyUnitSelectionDesktopScreen({
     super.key,
     required this.controller,
-    required this.onLessonSelected,
+    required this.onUnitSelected,
     required this.onBack,
   });
 
   final StudySessionController controller;
-  final void Function(StudyLesson lesson, int partIndex) onLessonSelected;
+  final void Function(StudyUnit unit, int lessonIndex) onUnitSelected;
   final VoidCallback onBack;
 
   @override
-  State<StudyLessonSelectionDesktopScreen> createState() =>
-      _StudyLessonSelectionDesktopScreenState();
+  State<StudyUnitSelectionDesktopScreen> createState() =>
+      _StudyUnitSelectionDesktopScreenState();
 }
 
-class _StudyLessonSelectionDesktopScreenState
-    extends State<StudyLessonSelectionDesktopScreen> {
-  int? _selectedPartIndex;
+class _StudyUnitSelectionDesktopScreenState
+    extends State<StudyUnitSelectionDesktopScreen> {
+  int? _selectedLessonIndex;
   int _wordsToLearn = 5;
 
   @override
@@ -37,20 +37,20 @@ class _StudyLessonSelectionDesktopScreenState
           backgroundColor: ColorManager.grey50,
           body: Row(
             children: [
-              // Left side: Header and lesson list
+              // Left side: Header and unit list
               Expanded(
                 flex: 5,
                 child: Column(
                   children: [
                     _buildHeader(),
                     Expanded(
-                      child: _buildLessonList(),
+                      child: _buildUnitList(),
                     ),
                   ],
                 ),
               ),
 
-              // Right side: Lesson details
+              // Right side: Unit details
               Container(
                 width: 400.w.clamp(350, 480),
                 decoration: const BoxDecoration(
@@ -62,8 +62,8 @@ class _StudyLessonSelectionDesktopScreenState
                     ),
                   ),
                 ),
-                child: widget.controller.selectedLesson != null
-                    ? _buildLessonDetails(widget.controller.selectedLesson!)
+                child: widget.controller.selectedUnit != null
+                    ? _buildUnitDetails(widget.controller.selectedUnit!)
                     : _buildEmptyDetails(),
               ),
             ],
@@ -112,7 +112,7 @@ class _StudyLessonSelectionDesktopScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose a Lesson',
+                    'Choose a Unit',
                     style: TextStyle(
                       fontSize: 28.sp.clamp(24, 32),
                       fontWeight: FontWeight.w700,
@@ -121,7 +121,7 @@ class _StudyLessonSelectionDesktopScreenState
                   ),
                   SizedBox(height: 8.h),
                   Text(
-                    'Select a lesson to start learning vocabulary',
+                    'Select a unit to start learning vocabulary',
                     style: TextStyle(
                       fontSize: 16.sp.clamp(14, 18),
                       fontWeight: FontWeight.w500,
@@ -137,7 +137,7 @@ class _StudyLessonSelectionDesktopScreenState
     );
   }
 
-  Widget _buildLessonList() {
+  Widget _buildUnitList() {
     if (widget.controller.isLoading) {
       return Center(
         child: CircularProgressIndicator(
@@ -149,18 +149,18 @@ class _StudyLessonSelectionDesktopScreenState
 
     return ListView.builder(
       padding: EdgeInsets.all(24.w),
-      itemCount: widget.controller.lessons.length,
+      itemCount: widget.controller.units.length,
       itemBuilder: (context, index) {
-        final lesson = widget.controller.lessons[index];
+        final unit = widget.controller.units[index];
         return Padding(
           padding: EdgeInsets.only(bottom: 16.h),
-          child: StudyLessonCard(
-            lesson: lesson,
-            isSelected: widget.controller.selectedLesson?.id == lesson.id,
+          child: StudyUnitCard(
+            unit: unit,
+            isSelected: widget.controller.selectedUnit?.id == unit.id,
             onTap: () {
-              widget.controller.selectLessonById(lesson.id);
+              widget.controller.selectUnitById(unit.id);
               setState(() {
-                _selectedPartIndex = null;
+                _selectedLessonIndex = null;
                 _wordsToLearn = 5;
               });
             },
@@ -182,7 +182,7 @@ class _StudyLessonSelectionDesktopScreenState
           ),
           SizedBox(height: 16.h),
           Text(
-            'Select a lesson',
+            'Select a unit',
             style: TextStyle(
               fontSize: 18.sp.clamp(16, 20),
               fontWeight: FontWeight.w600,
@@ -191,7 +191,7 @@ class _StudyLessonSelectionDesktopScreenState
           ),
           SizedBox(height: 8.h),
           Text(
-            'Choose a lesson from the list\nto view details',
+            'Choose a unit from the list\nto view details',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14.sp.clamp(12, 16),
@@ -204,18 +204,18 @@ class _StudyLessonSelectionDesktopScreenState
     );
   }
 
-  Widget _buildLessonDetails(StudyLesson lesson) {
+  Widget _buildUnitDetails(StudyUnit unit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Lesson title
+        // Unit title
         Padding(
           padding: EdgeInsets.all(24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                lesson.title,
+                unit.title,
                 style: TextStyle(
                   fontSize: 24.sp.clamp(20, 28),
                   fontWeight: FontWeight.w700,
@@ -224,7 +224,7 @@ class _StudyLessonSelectionDesktopScreenState
               ),
               SizedBox(height: 8.h),
               Text(
-                lesson.description,
+                unit.description,
                 style: TextStyle(
                   fontSize: 14.sp.clamp(12, 16),
                   fontWeight: FontWeight.w400,
@@ -236,12 +236,12 @@ class _StudyLessonSelectionDesktopScreenState
                 children: [
                   _buildInfoChip(
                     Icons.layers_rounded,
-                    '${lesson.totalParts} parts',
+                    '${unit.totalLessons} lessons',
                   ),
                   SizedBox(width: 12.w),
                   _buildInfoChip(
                     Icons.text_fields_rounded,
-                    '${lesson.totalWords} words',
+                    '${unit.totalWords} words',
                   ),
                 ],
               ),
@@ -250,11 +250,11 @@ class _StudyLessonSelectionDesktopScreenState
         ),
         const Divider(height: 1, color: ColorManager.grey200),
 
-        // Parts selection
+        // Lessons selection
         Padding(
           padding: EdgeInsets.all(24.w),
           child: Text(
-            'Select a Part',
+            'Select a Lesson',
             style: TextStyle(
               fontSize: 16.sp.clamp(14, 18),
               fontWeight: FontWeight.w600,
@@ -263,20 +263,20 @@ class _StudyLessonSelectionDesktopScreenState
           ),
         ),
 
-        // Parts list
+        // Lessons list
         Expanded(
           child: ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
-            itemCount: lesson.parts.length,
+            itemCount: unit.lessons.length,
             itemBuilder: (context, index) {
-              final part = lesson.parts[index];
-              final isSelected = _selectedPartIndex == index;
+              final lesson = unit.lessons[index];
+              final isSelected = _selectedLessonIndex == index;
 
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedPartIndex = index;
-                    _wordsToLearn = part.words.length.clamp(1, 5);
+                    _selectedLessonIndex = index;
+                    _wordsToLearn = lesson.words.length.clamp(1, 5);
                   });
                 },
                 child: Container(
@@ -324,7 +324,7 @@ class _StudyLessonSelectionDesktopScreenState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Part ${index + 1}',
+                              'Lesson ${index + 1}',
                               style: TextStyle(
                                 fontSize: 15.sp.clamp(14, 17),
                                 fontWeight: FontWeight.w600,
@@ -332,7 +332,7 @@ class _StudyLessonSelectionDesktopScreenState
                               ),
                             ),
                             Text(
-                              '${part.words.length} words',
+                              '${lesson.words.length} words',
                               style: TextStyle(
                                 fontSize: 13.sp.clamp(12, 15),
                                 fontWeight: FontWeight.w500,
@@ -357,7 +357,7 @@ class _StudyLessonSelectionDesktopScreenState
         ),
 
         // Word count slider
-        if (_selectedPartIndex != null) _buildWordCountSelector(lesson),
+        if (_selectedLessonIndex != null) _buildWordCountSelector(unit),
 
         // Start button
         Padding(
@@ -365,9 +365,9 @@ class _StudyLessonSelectionDesktopScreenState
           child: SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _selectedPartIndex != null
+              onPressed: _selectedLessonIndex != null
                   ? () {
-                      widget.onLessonSelected(lesson, _selectedPartIndex!);
+                      widget.onUnitSelected(unit, _selectedLessonIndex!);
                     }
                   : null,
               style: ElevatedButton.styleFrom(
@@ -423,9 +423,9 @@ class _StudyLessonSelectionDesktopScreenState
     );
   }
 
-  Widget _buildWordCountSelector(StudyLesson lesson) {
-    final maxWords = _selectedPartIndex != null
-        ? lesson.parts[_selectedPartIndex!].words.length
+  Widget _buildWordCountSelector(StudyUnit unit) {
+    final maxWords = _selectedLessonIndex != null
+        ? unit.lessons[_selectedLessonIndex!].words.length
         : 5;
 
     return Container(
