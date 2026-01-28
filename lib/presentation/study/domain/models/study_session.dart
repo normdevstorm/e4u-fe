@@ -1,5 +1,5 @@
 import 'package:e4u_application/presentation/study/domain/models/study_exercise.dart';
-import 'package:e4u_application/presentation/study/domain/models/study_lesson.dart';
+import 'package:e4u_application/presentation/study/domain/models/study_unit.dart';
 import 'package:e4u_application/presentation/study/domain/models/study_word.dart';
 
 /// Enum for learning mode selection.
@@ -30,7 +30,7 @@ enum StudyPhase {
 class StudySession {
   const StudySession({
     required this.id,
-    required this.lesson,
+    required this.unit,
     required this.words,
     required this.exercises,
     this.mode = StudyMode.sequential,
@@ -46,7 +46,7 @@ class StudySession {
   });
 
   final String id;
-  final StudyLesson lesson;
+  final StudyUnit unit;
   final List<StudyWord> words;
   final List<StudyExercise> exercises;
   final StudyMode mode;
@@ -65,10 +65,9 @@ class StudySession {
       currentWordIndex < words.length ? words[currentWordIndex] : null;
 
   /// Current exercise
-  StudyExercise? get currentExercise =>
-      currentExerciseIndex < exercises.length
-          ? exercises[currentExerciseIndex]
-          : null;
+  StudyExercise? get currentExercise => currentExerciseIndex < exercises.length
+      ? exercises[currentExerciseIndex]
+      : null;
 
   /// Total exercises in session
   int get totalExercises => exercises.length;
@@ -96,7 +95,7 @@ class StudySession {
 
   StudySession copyWith({
     String? id,
-    StudyLesson? lesson,
+    StudyUnit? unit,
     List<StudyWord>? words,
     List<StudyExercise>? exercises,
     StudyMode? mode,
@@ -112,7 +111,7 @@ class StudySession {
   }) {
     return StudySession(
       id: id ?? this.id,
-      lesson: lesson ?? this.lesson,
+      unit: unit ?? this.unit,
       words: words ?? this.words,
       exercises: exercises ?? this.exercises,
       mode: mode ?? this.mode,

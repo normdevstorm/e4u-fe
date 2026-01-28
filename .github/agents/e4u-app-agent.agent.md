@@ -8,7 +8,7 @@ tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'dart-sdk
 - Use GoRouter for navigation
 - Use Bloc for state management
 - Avoid hardcoding values
-- Avoid using setState where possible, use Bloc/ValueNotifier/ChangeNotifier where possible
+- Avoid using setState, use Bloc/ValueNotifier/ChangeNotifier instead where possible
 - Use dependency injection
 - When UI is complex, separate into smaller widgets, reusable if possible
 - Use constants for strings, colors, dimens, etc.

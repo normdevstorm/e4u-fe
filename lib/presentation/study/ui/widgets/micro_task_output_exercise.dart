@@ -371,33 +371,41 @@ class _MicroTaskOutputExerciseWidgetState
   }
 
   Widget _buildActionButton() {
-    final bool canSubmit = _textController.text.trim().isNotEmpty;
+    // Use ValueListenableBuilder to only rebuild the button when text changes
+    // This is more efficient than setState which rebuilds the entire widget
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: _textController,
+      builder: (context, value, child) {
+        final bool canSubmit = value.text.trim().isNotEmpty;
 
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: canSubmit || _hasAnswered
-            ? (_hasAnswered ? _continue : _checkAnswer)
-            : null,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ColorManager.purpleHard,
-          disabledBackgroundColor: ColorManager.grey200,
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: canSubmit || _hasAnswered
+                ? (_hasAnswered ? _continue : _checkAnswer)
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ColorManager.purpleHard,
+              disabledBackgroundColor: ColorManager.grey200,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              elevation: 0,
+            ),
+            child: Text(
+              _hasAnswered ? 'Continue' : 'Submit',
+              style: TextStyle(
+                fontSize: 16.sp.clamp(14, 18),
+                fontWeight: FontWeight.w600,
+                color: canSubmit || _hasAnswered
+                    ? Colors.white
+                    : ColorManager.grey500,
+              ),
+            ),
           ),
-          elevation: 0,
-        ),
-        child: Text(
-          _hasAnswered ? 'Continue' : 'Submit',
-          style: TextStyle(
-            fontSize: 16.sp.clamp(14, 18),
-            fontWeight: FontWeight.w600,
-            color:
-                canSubmit || _hasAnswered ? Colors.white : ColorManager.grey500,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
