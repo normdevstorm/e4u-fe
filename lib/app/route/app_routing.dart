@@ -14,7 +14,8 @@ import 'custom_navigator_observer.dart';
 // Import route definitions
 import '../../presentation/auth/auth_route.dart' show loginRoute, registerRoute;
 import '../../presentation/home/home_route.dart' show homeRoute;
-import '../../presentation/learning/learning_route.dart' show learningRoute;
+import '../../presentation/curriculum/learning_route.dart'
+    show $learningScreenRoute;
 import '../../presentation/stats/stats_route.dart' show statsRoute;
 import '../../presentation/profile/profile_route.dart' show profileRoute;
 
@@ -93,7 +94,7 @@ class AppRouting {
                   routes: <RouteBase>[homeRoute]),
               StatefulShellBranch(
                   navigatorKey: rootNavigatorLearning,
-                  routes: <RouteBase>[learningRoute]),
+                  routes: <RouteBase>[$learningScreenRoute]),
               StatefulShellBranch(
                   navigatorKey: rootNavigatorStats,
                   routes: <RouteBase>[statsRoute]),

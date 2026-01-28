@@ -3,6 +3,7 @@ class RouteDefine {
   static const String homeScreen = 'home-screen';
 
   static const String learning = 'learning';
+  static const String study = 'study';
 
   static const String stats = 'stats';
 
