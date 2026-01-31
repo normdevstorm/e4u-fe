@@ -153,7 +153,8 @@ class MyApp extends StatelessWidget {
 bool get _isMobilePlatform {
   if (kIsWeb) {
     // Treat web as desktop-like by default for layout purposes.
-    return false;
+    /// TODO: temporary set true for mobile web
+    return true;
   }
 
   return defaultTargetPlatform == TargetPlatform.iOS ||

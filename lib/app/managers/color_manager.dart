@@ -43,6 +43,18 @@ class ColorManager {
   static const Color baseBlack = Color(0xFF1E1F20);
 
   // ============================================
+  // Semantic Colors - Status & Feedback
+  // ============================================
+  static const Color success = Color(0xFF22C55E); // Green for success states
+  static const Color successLight = Color(0xFFDCFCE7); // Light green background
+  static const Color warning = Color(0xFFF59E0B); // Amber for warning states
+  static const Color warningLight = Color(0xFFFEF3C7); // Light amber background
+  static const Color error = Color(0xFFEF4444); // Red for error states
+  static const Color errorLight = Color(0xFFFEE2E2); // Light red background
+  static const Color info = Color(0xFF3B82F6); // Blue for info states
+  static const Color infoLight = Color(0xFFDBEAFE); // Light blue background
+
+  // ============================================
   // Legacy Theme Colors (kept for backward compatibility)
   // ============================================
   // Light Theme Colors
