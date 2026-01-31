@@ -138,6 +138,7 @@ class StudyUnitSelectionMobileScreen extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useRootNavigator: true, // Show above bottom navigation bar
       backgroundColor: Colors.transparent,
       builder: (context) => _LessonSelectionSheet(
         unit: unit,
