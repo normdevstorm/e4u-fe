@@ -39,6 +39,7 @@ class StudyUnitCard extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useRootNavigator: true, // Show above bottom navigation bar
       backgroundColor: Colors.transparent,
       builder: (context) => _WordsPreviewBottomSheet(
         unitTitle: unit.title,
