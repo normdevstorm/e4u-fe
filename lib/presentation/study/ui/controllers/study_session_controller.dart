@@ -149,21 +149,22 @@ class StudySessionController extends ChangeNotifier {
   }
 
   /// Generate all exercises for the session
+  /// Flow: Contextual Discovery for all words first, then practice exercises for all words
   List<StudyExercise> _generateExercises(List<StudyWord> words) {
     final exercises = <StudyExercise>[];
     int exerciseId = 0;
 
+    // Phase 1: Contextual Discovery - introduce all words first (1 card per word)
     for (final word in words) {
-      // Phase 1: Contextual Discovery (3 cards per word)
-      for (int i = 0; i < 3; i++) {
-        exercises.add(ContextualDiscoveryExercise(
-          id: 'ex_${exerciseId++}',
-          targetWord: word,
-          cardIndex: i,
-        ));
-      }
+      exercises.add(ContextualDiscoveryExercise(
+        id: 'ex_${exerciseId++}',
+        targetWord: word,
+        cardIndex: 0, // Single discovery card per word
+      ));
+    }
 
-      // Phase 2: Mechanic Drill
+    // Phase 2: Mechanic Drill - practice all words
+    for (final word in words) {
       // Multiple Choice
       exercises.add(MultipleChoiceExercise(
         id: 'ex_${exerciseId++}',
@@ -189,8 +190,10 @@ class StudySessionController extends ChangeNotifier {
         correctSentence: word.contextSentence,
         shuffledParts: _shuffleSentence(word.contextSentence),
       ));
+    }
 
-      // Phase 3: Micro Task Output
+    // Phase 3: Micro Task Output - apply all words
+    for (final word in words) {
       // Medium Level
       exercises.add(MicroTaskMediumExercise(
         id: 'ex_${exerciseId++}',
@@ -518,6 +521,7 @@ class StudySessionController extends ChangeNotifier {
         description: 'Essential action words for daily use',
         estimatedMinutes: 20,
         isLocked: false,
+        isCompleted: true,
         lessons: [
           StudyLesson(
             id: 'lesson_2_1',

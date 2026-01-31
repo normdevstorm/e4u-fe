@@ -3,6 +3,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e4u_application/app/app.dart';
 import 'package:e4u_application/presentation/study/domain/models/study_models.dart';
 
+/// Enum representing the status of a study unit.
+enum StudyUnitStatus {
+  /// Unit has not been started yet
+  notStarted,
+
+  /// Unit is currently in progress
+  inProgress,
+
+  /// Unit has been completed
+  completed,
+
+  /// Unit is locked and cannot be accessed
+  locked,
+}
+
 /// Card widget displaying a unit for selection.
 class StudyUnitCard extends StatelessWidget {
   const StudyUnitCard({
@@ -121,6 +136,9 @@ class StudyUnitCard extends StatelessWidget {
                   ),
               ],
             ),
+            SizedBox(height: 8.h),
+            // Unit status badge
+            _buildStatusBadge(),
             SizedBox(height: 12.h),
             // Unit info
             Row(
@@ -148,6 +166,73 @@ class StudyUnitCard extends StatelessWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+
+  /// Get the current status of the unit based on its properties.
+  StudyUnitStatus get _unitStatus {
+    if (unit.isLocked) return StudyUnitStatus.locked;
+    if (unit.isCompleted) return StudyUnitStatus.completed;
+    if (unit.progress > 0) return StudyUnitStatus.inProgress;
+    return StudyUnitStatus.notStarted;
+  }
+
+  /// Build the status badge widget based on unit status.
+  Widget _buildStatusBadge() {
+    final status = _unitStatus;
+    final (String label, Color bgColor, Color textColor, IconData icon) =
+        switch (status) {
+      StudyUnitStatus.completed => (
+          'Completed',
+          ColorManager.success.withOpacity(0.1),
+          ColorManager.success,
+          Icons.check_circle_rounded,
+        ),
+      StudyUnitStatus.inProgress => (
+          'In Progress',
+          ColorManager.warning.withOpacity(0.1),
+          ColorManager.warning,
+          Icons.schedule_rounded,
+        ),
+      StudyUnitStatus.locked => (
+          'Locked',
+          ColorManager.grey200,
+          ColorManager.grey500,
+          Icons.lock_rounded,
+        ),
+      StudyUnitStatus.notStarted => (
+          'Not Started',
+          ColorManager.purpleLight,
+          ColorManager.purpleHard,
+          Icons.play_circle_outline_rounded,
+        ),
+    };
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(100.r),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 14.r,
+            color: textColor,
+          ),
+          SizedBox(width: 4.w),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11.sp.clamp(10, 13),
+              fontWeight: FontWeight.w600,
+              color: textColor,
+            ),
+          ),
+        ],
       ),
     );
   }
