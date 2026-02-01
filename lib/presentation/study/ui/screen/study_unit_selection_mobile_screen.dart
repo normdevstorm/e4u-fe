@@ -6,7 +6,7 @@ import 'package:e4u_application/presentation/study/ui/controllers/study_session_
 import 'package:e4u_application/presentation/study/ui/widgets/study_widgets.dart';
 
 /// Mobile screen for unit selection.
-class StudyUnitSelectionMobileScreen extends StatelessWidget {
+class StudyUnitSelectionMobileScreen extends StatefulWidget {
   const StudyUnitSelectionMobileScreen({
     super.key,
     required this.controller,
@@ -19,9 +19,16 @@ class StudyUnitSelectionMobileScreen extends StatelessWidget {
   final VoidCallback onBack;
 
   @override
+  State<StudyUnitSelectionMobileScreen> createState() =>
+      _StudyUnitSelectionMobileScreenState();
+}
+
+class _StudyUnitSelectionMobileScreenState
+    extends State<StudyUnitSelectionMobileScreen> {
+  @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: controller,
+      listenable: widget.controller,
       builder: (context, _) {
         return Scaffold(
           backgroundColor: ColorManager.grey50,
@@ -34,7 +41,7 @@ class StudyUnitSelectionMobileScreen extends StatelessWidget {
                 pinned: true,
                 expandedHeight: 160.h,
                 leading: GestureDetector(
-                  onTap: onBack,
+                  onTap: widget.onBack,
                   child: Container(
                     margin: EdgeInsets.all(8.r),
                     decoration: const BoxDecoration(
@@ -48,6 +55,28 @@ class StudyUnitSelectionMobileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                actions: [
+                  GestureDetector(
+                    onTap: () => _showFilterBottomSheet(context),
+                    child: Container(
+                      margin: EdgeInsets.all(8.r),
+                      padding: EdgeInsets.all(8.r),
+                      decoration: BoxDecoration(
+                        color: widget.controller.hasActiveFilter
+                            ? ColorManager.purpleHard
+                            : ColorManager.grey100,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.filter_list_rounded,
+                        size: 22.r,
+                        color: widget.controller.hasActiveFilter
+                            ? Colors.white
+                            : ColorManager.grey700,
+                      ),
+                    ),
+                  ),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(
                     decoration: const BoxDecoration(
@@ -93,7 +122,7 @@ class StudyUnitSelectionMobileScreen extends StatelessWidget {
               ),
 
               // Loading indicator
-              if (controller.isLoading)
+              if (widget.controller.isLoading)
                 SliverFillRemaining(
                   child: Center(
                     child: CircularProgressIndicator(
@@ -104,26 +133,27 @@ class StudyUnitSelectionMobileScreen extends StatelessWidget {
                 ),
 
               // Unit list
-              if (!controller.isLoading)
+              if (!widget.controller.isLoading)
                 SliverPadding(
                   padding: EdgeInsets.all(16.w),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        final unit = controller.units[index];
+                        final unit = widget.controller.units[index];
                         return Padding(
                           padding: EdgeInsets.only(bottom: 12.h),
                           child: StudyUnitCard(
                             unit: unit,
-                            isSelected: controller.selectedUnit?.id == unit.id,
+                            isSelected:
+                                widget.controller.selectedUnit?.id == unit.id,
                             onTap: () {
-                              controller.selectUnitById(unit.id);
+                              widget.controller.selectUnitById(unit.id);
                               _showLessonSelectionSheet(context, unit);
                             },
                           ),
                         );
                       },
-                      childCount: controller.units.length,
+                      childCount: widget.controller.units.length,
                     ),
                   ),
                 ),
@@ -144,8 +174,20 @@ class StudyUnitSelectionMobileScreen extends StatelessWidget {
         unit: unit,
         onLessonSelected: (lessonIndex) {
           Navigator.pop(context);
-          onUnitSelected(unit, lessonIndex);
+          widget.onUnitSelected(unit, lessonIndex);
         },
+      ),
+    );
+  }
+
+  void _showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _FilterBottomSheet(
+        controller: widget.controller,
       ),
     );
   }
@@ -448,6 +490,225 @@ class _LessonSelectionSheetState extends State<_LessonSelectionSheet> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Bottom sheet widget for filtering units by status
+class _FilterBottomSheet extends StatefulWidget {
+  const _FilterBottomSheet({
+    required this.controller,
+  });
+
+  final StudySessionController controller;
+
+  @override
+  State<_FilterBottomSheet> createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<_FilterBottomSheet> {
+  late Set<StudyUnitStatus> _selectedFilters;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedFilters = Set.from(widget.controller.statusFilter);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorManager.baseWhite,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Handle
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 12.h),
+            width: 40.w,
+            height: 4.h,
+            decoration: BoxDecoration(
+              color: ColorManager.grey300,
+              borderRadius: BorderRadius.circular(2.r),
+            ),
+          ),
+
+          // Header
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Filter by Status',
+                  style: TextStyle(
+                    fontSize: 22.sp.clamp(18, 24),
+                    fontWeight: FontWeight.w700,
+                    color: ColorManager.grey950,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedFilters.clear();
+                    });
+                  },
+                  child: Text(
+                    'Clear All',
+                    style: TextStyle(
+                      fontSize: 14.sp.clamp(12, 16),
+                      fontWeight: FontWeight.w600,
+                      color: ColorManager.purpleHard,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
+
+          // Filter options
+          Flexible(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                children: StudyUnitStatus.values.map((status) {
+                  return _buildFilterOption(status);
+                }).toList(),
+              ),
+            ),
+          ),
+
+          // Apply button
+          Padding(
+            padding: EdgeInsets.all(20.w),
+            child: SafeArea(
+              top: false,
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    widget.controller.setStatusFilter(_selectedFilters);
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorManager.purpleHard,
+                    padding: EdgeInsets.symmetric(vertical: 16.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    _selectedFilters.isEmpty
+                        ? 'Show All Units'
+                        : 'Apply Filter (${_selectedFilters.length})',
+                    style: TextStyle(
+                      fontSize: 16.sp.clamp(14, 18),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterOption(StudyUnitStatus status) {
+    final isSelected = _selectedFilters.contains(status);
+    final (String label, Color color, IconData icon) = switch (status) {
+      StudyUnitStatus.completed => (
+          'Completed',
+          ColorManager.success,
+          Icons.check_circle_rounded,
+        ),
+      StudyUnitStatus.inProgress => (
+          'In Progress',
+          ColorManager.warning,
+          Icons.schedule_rounded,
+        ),
+      StudyUnitStatus.locked => (
+          'Locked',
+          ColorManager.grey500,
+          Icons.lock_rounded,
+        ),
+      StudyUnitStatus.notStarted => (
+          'Not Started',
+          ColorManager.purpleHard,
+          Icons.play_circle_outline_rounded,
+        ),
+    };
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (isSelected) {
+            _selectedFilters.remove(status);
+          } else {
+            _selectedFilters.add(status);
+          }
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.1) : ColorManager.grey50,
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(
+            color: isSelected ? color : ColorManager.grey200,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40.r,
+              height: 40.r,
+              decoration: BoxDecoration(
+                color: isSelected ? color : ColorManager.grey200,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: Icon(
+                icon,
+                size: 20.r,
+                color: isSelected ? Colors.white : ColorManager.grey600,
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 16.sp.clamp(14, 18),
+                  fontWeight: FontWeight.w600,
+                  color: ColorManager.grey950,
+                ),
+              ),
+            ),
+            if (isSelected)
+              Container(
+                padding: EdgeInsets.all(4.r),
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check_rounded,
+                  size: 16.r,
+                  color: Colors.white,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

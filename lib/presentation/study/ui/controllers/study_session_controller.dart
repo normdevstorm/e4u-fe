@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:e4u_application/app/app.dart';
 import 'package:e4u_application/presentation/study/domain/models/study_models.dart';
+import 'package:e4u_application/presentation/study/ui/widgets/study_unit_card.dart';
 
 /// Controller for managing study session state and flow.
 /// Handles curriculum selection, unit selection, word preview, and learning flow.
@@ -15,12 +16,25 @@ class StudySessionController extends ChangeNotifier {
   int _committedTimeMinutes = 10;
   bool _isLoading = false;
   String? _errorMessage;
+  Set<StudyUnitStatus> _statusFilter = {}; // Empty means no filter
 
   // --- Getters ---
   StudySession? get currentSession => _currentSession;
   StudyUnit? get selectedUnit => _selectedUnit;
   List<StudyUnit> get availableUnits => _availableUnits;
-  List<StudyUnit> get units => _availableUnits; // Alias for compatibility
+  Set<StudyUnitStatus> get statusFilter => _statusFilter;
+
+  /// Get filtered units based on status filter
+  List<StudyUnit> get units {
+    if (_statusFilter.isEmpty) {
+      return _availableUnits;
+    }
+    return _availableUnits.where((unit) {
+      final status = _getUnitStatus(unit);
+      return _statusFilter.contains(status);
+    }).toList();
+  }
+
   StudyMode get selectedMode => _selectedMode;
   int get committedTimeMinutes => _committedTimeMinutes;
   bool get isLoading => _isLoading;
@@ -28,6 +42,46 @@ class StudySessionController extends ChangeNotifier {
 
   int get wordsToLearn =>
       StudySession.calculateWordsToLearn(_committedTimeMinutes);
+
+  /// Get the status of a unit
+  StudyUnitStatus _getUnitStatus(StudyUnit unit) {
+    if (unit.isLocked) return StudyUnitStatus.locked;
+    if (unit.isCompleted) return StudyUnitStatus.completed;
+    if (unit.progress > 0) return StudyUnitStatus.inProgress;
+    return StudyUnitStatus.notStarted;
+  }
+
+  // --- Filtering ---
+
+  /// Toggle a status filter
+  void toggleStatusFilter(StudyUnitStatus status) {
+    if (_statusFilter.contains(status)) {
+      _statusFilter.remove(status);
+    } else {
+      _statusFilter.add(status);
+    }
+    notifyListeners();
+  }
+
+  /// Clear all status filters
+  void clearStatusFilter() {
+    _statusFilter.clear();
+    notifyListeners();
+  }
+
+  /// Set specific status filters
+  void setStatusFilter(Set<StudyUnitStatus> statuses) {
+    _statusFilter = {...statuses};
+    notifyListeners();
+  }
+
+  /// Check if a specific status is filtered
+  bool isStatusFiltered(StudyUnitStatus status) {
+    return _statusFilter.contains(status);
+  }
+
+  /// Check if any filter is active
+  bool get hasActiveFilter => _statusFilter.isNotEmpty;
 
   /// Get the current exercise being displayed
   StudyExercise? get currentExercise {

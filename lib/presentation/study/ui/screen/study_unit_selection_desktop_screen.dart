@@ -131,6 +131,27 @@ class _StudyUnitSelectionDesktopScreenState
                 ],
               ),
             ),
+            // Filter button
+            GestureDetector(
+              onTap: () => _showFilterDialog(context),
+              child: Container(
+                width: 48.r,
+                height: 48.r,
+                decoration: BoxDecoration(
+                  color: widget.controller.hasActiveFilter
+                      ? Colors.white
+                      : Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Icon(
+                  Icons.filter_list_rounded,
+                  size: 24.r,
+                  color: widget.controller.hasActiveFilter
+                      ? ColorManager.purpleHard
+                      : Colors.white,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -482,6 +503,247 @@ class _StudyUnitSelectionDesktopScreenState
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => _FilterDialog(
+        controller: widget.controller,
+      ),
+    );
+  }
+}
+
+/// Dialog widget for filtering units by status on desktop
+class _FilterDialog extends StatefulWidget {
+  const _FilterDialog({
+    required this.controller,
+  });
+
+  final StudySessionController controller;
+
+  @override
+  State<_FilterDialog> createState() => _FilterDialogState();
+}
+
+class _FilterDialogState extends State<_FilterDialog> {
+  late Set<StudyUnitStatus> _selectedFilters;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedFilters = Set.from(widget.controller.statusFilter);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: ColorManager.baseWhite,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      contentPadding: EdgeInsets.zero,
+      content: SizedBox(
+        width: 400.w,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Filter by Status',
+                    style: TextStyle(
+                      fontSize: 20.sp.clamp(18, 22),
+                      fontWeight: FontWeight.w700,
+                      color: ColorManager.grey950,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedFilters.clear();
+                      });
+                    },
+                    child: Text(
+                      'Clear All',
+                      style: TextStyle(
+                        fontSize: 14.sp.clamp(12, 16),
+                        fontWeight: FontWeight.w600,
+                        color: ColorManager.purpleHard,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Filter options
+            Flexible(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  children: StudyUnitStatus.values.map((status) {
+                    return _buildFilterOption(status);
+                  }).toList(),
+                ),
+              ),
+            ),
+
+            // Action buttons
+            Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        side: const BorderSide(color: ColorManager.grey300),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 14.sp.clamp(12, 16),
+                          fontWeight: FontWeight.w600,
+                          color: ColorManager.grey700,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        widget.controller.setStatusFilter(_selectedFilters);
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorManager.purpleHard,
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        _selectedFilters.isEmpty
+                            ? 'Show All'
+                            : 'Apply (${_selectedFilters.length})',
+                        style: TextStyle(
+                          fontSize: 14.sp.clamp(12, 16),
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterOption(StudyUnitStatus status) {
+    final isSelected = _selectedFilters.contains(status);
+    final (String label, Color color, IconData icon) = switch (status) {
+      StudyUnitStatus.completed => (
+          'Completed',
+          ColorManager.success,
+          Icons.check_circle_rounded,
+        ),
+      StudyUnitStatus.inProgress => (
+          'In Progress',
+          ColorManager.warning,
+          Icons.schedule_rounded,
+        ),
+      StudyUnitStatus.locked => (
+          'Locked',
+          ColorManager.grey500,
+          Icons.lock_rounded,
+        ),
+      StudyUnitStatus.notStarted => (
+          'Not Started',
+          ColorManager.purpleHard,
+          Icons.play_circle_outline_rounded,
+        ),
+    };
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (isSelected) {
+            _selectedFilters.remove(status);
+          } else {
+            _selectedFilters.add(status);
+          }
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 8.h),
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.1) : ColorManager.grey50,
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(
+            color: isSelected ? color : ColorManager.grey200,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 32.r,
+              height: 32.r,
+              decoration: BoxDecoration(
+                color: isSelected ? color : ColorManager.grey200,
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: Icon(
+                icon,
+                size: 16.r,
+                color: isSelected ? Colors.white : ColorManager.grey600,
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14.sp.clamp(12, 16),
+                  fontWeight: FontWeight.w600,
+                  color: ColorManager.grey950,
+                ),
+              ),
+            ),
+            if (isSelected)
+              Container(
+                padding: EdgeInsets.all(2.r),
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check_rounded,
+                  size: 12.r,
+                  color: Colors.white,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
